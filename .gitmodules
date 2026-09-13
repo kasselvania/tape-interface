@@ -1,0 +1,3 @@
+[submodule "tape_sdk"]
+	path = tape_sdk
+	url = https://github.com/bedtime-llc/tape_sdk.git
