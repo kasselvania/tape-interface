@@ -190,8 +190,10 @@ Current artifact: **5,468 bytes**, SHA-256
 SDK verification runs and the same 18-import boundary. The official emulator
 lifecycle harness passes, with its existing missing-mixer limitation. A separate
 synthetic fixture confirms the 4.95% display layout. The correction has been
-installed with byte-for-byte readback and safe ejection; its displayed hardware
-percentage is pending. USB and local audio remain NOT TESTED.
+installed with byte-for-byte readback and safe ejection. The operator reports
+the corrected display working at approximately 5%, without exact decimal text.
+Subsequent monitor-OFF testing silenced both local input and DAW capture; see
+[the audio-path findings](AUDIO_PATH_FINDINGS.md).
 
 ## Physical Stage C checklist
 
@@ -205,11 +207,11 @@ feed-through cannot be confused. Keep the pedal disconnected for this cut.
 
 | Check | Procedure and evidence required | Result |
 | --- | --- | --- |
-| Launch/readback | Note stock settings before launch. C1 must show them without changing them; compare LINE/MIC, effective monitor and gain. Record N/A if unavailable. | PARTIAL: launch and diagnostic readback PASS by operator report. Gain percentage FAIL; API=49 for VAL approximately 0.098 in 0..2 range. Stock comparison NOT TESTED. |
-| Monitor ON / local input | Select LINE; feed a steady external signal. With USB playback stopped, BTN1 press requests ON. Confirm effective ON and physical input audible at tape!'s output. | NOT TESTED |
-| Monitor OFF / local input | Keep the same physical signal. BTN1 press requests OFF. Confirm effective OFF and that local physical-input feed-through disappears. | NOT TESTED |
+| Launch/readback | Note stock settings before launch. C1 must show them without changing them; compare LINE/MIC, effective monitor and gain. Record N/A if unavailable. | PARTIAL: corrected display reported working at approximately 5%; exact decimal and stock comparison NOT TESTED. |
+| Monitor ON / local input | Select LINE; feed a steady external signal. With USB playback stopped, BTN1 press requests ON. Confirm effective ON and physical input audible at tape!'s output. | PASS by operator report: speaker and USB signal present; no capture artifact collected. |
+| Monitor OFF / local input | Keep the same physical signal. BTN1 press requests OFF. Confirm effective OFF and that local physical-input feed-through disappears. | PASS by operator report: local sound disappears. |
 | Monitor OFF / USB playback | Stop the external input signal; keep effective monitor OFF. Play a distinct DAW/USB signal to tape!. Confirm it still reaches the physical output. | NOT TESTED |
-| Monitor OFF / USB capture | Stop DAW playback; restore the external physical-input signal. Keep monitor OFF and DAW software monitoring OFF. Capture tape!'s USB input; confirm the physical input is present. | NOT TESTED |
+| Monitor OFF / USB capture | Stop DAW playback; restore the external physical-input signal. Keep monitor OFF and DAW software monitoring OFF. Capture tape!'s USB input; confirm the physical input is present. | FAIL by operator report: Bitwig input meter/recording also goes silent. See AUDIO_PATH_FINDINGS.md. |
 | Input gain / USB capture | At fixed external-source and DAW gains, turn the encoder through at least three displayed percentages. Record the capture level at each and verify it follows the device setting. | NOT TESTED |
 | Source LINE/MIC/back | With headphones connected, BTN2 press/release must not switch source. Hold to change LINE to MIC, demonstrate the selected input, then hold back to LINE. Record effective monitor state after each switch. | NOT TESTED |
 | Effective-state refusal/external change | In an installed-firmware configuration that refuses monitor enable (documented example: MIC without headphones), verify UI remains effective OFF. Check that a jack/state change is reflected without another app action. Keep levels down. | NOT TESTED |

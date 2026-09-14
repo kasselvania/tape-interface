@@ -16,17 +16,16 @@ Initialization only reads audio settings. The UI follows external state changes,
 including firmware refusing a monitor-enable request. Unavailable input gain
 shows `N/A`. The screen explicitly identifies **STOCK ROUTE / NO DSP**.
 
-Follow [Stage C1 validation and the physical checklist](docs/STAGE_C1.md) first.
-C1 launch is operator-confirmed on firmware 1.1.4 (`e924784c`), but the initial
-gain display showed **50000%** and failed readback validation. A follow-up guard
-shows `N/A (range)` for API values outside the documented range; the operator
-confirmed that result on hardware. A diagnostic follow-up adds exact API and
-parameter bits: the operator observed API=49 then 49.5 for values approximately
-0.098 then 0.099 in a 0..2 range after encoder movement. Both are 1,000 times
-the documented normalized fraction. The corrected display supports either
-scale only when consistent with the parameter range, displaying 4.90% and 4.95%
-for those snapshots. Corrected-build hardware readback is pending. Parameter
-movement is observed; physical audio response remains **NOT TESTED**.
+Current hardware finding: **monitor OFF also silences Bitwig's input
+meter/recording** on firmware 1.1.4 (`e924784c`). C1 therefore has not established
+independent local monitoring and USB capture. See [audio-path findings and
+remaining questions](docs/AUDIO_PATH_FINDINGS.md) before further routing work.
+The pedal round trip is blocked by that requirement failure in the tested setup.
+
+The corrected gain display is operator-confirmed at approximately 5%; exact
+4.95% text was not reported. Encoder movement changed the underlying parameter.
+Gain-versus-capture-level testing remains pending. The SDK percentage discrepancy
+and its checked conversion are documented in [Stage C1](docs/STAGE_C1.md).
 
 ## Future intended signal path
 

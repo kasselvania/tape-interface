@@ -1,6 +1,9 @@
 # Physical round-trip test
 
-Status: **DEFERRED; NOT TESTED on tape! hardware with Bitwig and a pedal.** Complete
+Status: **BLOCKED by observed monitor/USB capture coupling; pedal round trip NOT TESTED.**
+Monitor OFF also silences DAW capture in the tested setup. See
+[audio-path findings](AUDIO_PATH_FINDINGS.md); do not use this future procedure
+as evidence that independent send/return routing exists. Complete
 the independent monitor/USB checks in [Stage C1](STAGE_C1.md) before using this
 future pedal procedure. C1 only controls stock firmware settings; it implements
 no custom routing or bypass.
@@ -11,7 +14,8 @@ feedback safety. The app does not configure this signal path.
 
 The [2026-09-14 hardware session](HARDWARE_SESSION_2026-09-14.md) records a
 verified USB-storage installation, operator-confirmed physical launch/exit, and
-host USB audio enumeration. Physical audio checks remain pending.
+host USB audio enumeration. Subsequent monitor-OFF capture testing failed the
+independence requirement; USB playback isolation remains pending.
 
 ## Physical cabling and safety
 

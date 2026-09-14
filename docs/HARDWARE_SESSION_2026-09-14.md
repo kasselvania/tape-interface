@@ -248,3 +248,23 @@ identified as `disk5`, writable ExFAT `disk5s1` at `/Volumes/Untitled`.
 Corrected-build launch and displayed percentage remain **NOT TESTED**. Next:
 launch without moving the encoder and report the input-gain label. If the
 parameter is unchanged from the last diagnostic readback, it should show 4.95%.
+
+
+## Corrected display accepted; audio-path independence fails
+
+The operator reported the corrected app appeared to work and showed "5%" at
+launch. This accepts a plausible gain display, not an exact two-decimal 4.95%
+readback or measured gain response. No later gain setting is assumed.
+
+The operator then reported external hardware at the input was audible from the
+speaker and USB with monitor ON, but monitor OFF cut all signal. On explicit
+clarification, the operator confirmed: **"Bitwig's input meter/recording also
+goes silent"**. This is operator evidence that monitor-OFF USB capture fails the
+independent-interface requirement in the tested setup. It is not merely the
+loss of audible local monitoring. No audio file or level measurement was collected.
+
+USB playback through Tape with its physical input disconnected has not yet been
+isolated. Do not infer that direction's result from input capture silence.
+[Audio-path findings](AUDIO_PATH_FINDINGS.md) separates the observed behavior,
+pinned SDK evidence and unresolved firmware topology. No audio implementation
+was changed in response; the installed 5,468-byte C1 app remains unchanged.
