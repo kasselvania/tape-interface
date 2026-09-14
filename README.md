@@ -1,11 +1,25 @@
 # Tape Interface
 
-Initial buildable scaffold for using tape! with Bitwig Hardware FX. The app is
-adapted from the SDK's [smallest example](tape_sdk/examples/simple_app.c): it
-displays **Tape Interface** and exits through `os_app_exit()` when BTN4 is held.
-It has no audio callbacks, effects, recording, USB changes, or routing logic.
+Stage C1 is a fullscreen **firmware audio-control probe**. It displays the
+effective monitor state, LINE/MIC source, and device input-gain percentage, and
+lets the operator change those stock firmware settings. It has no audio
+callbacks, DSP, recording, USB changes, custom bypass, or routing logic.
 
-## Intended signal path
+| Control | Firmware action |
+| --- | --- |
+| BTN1 press (`mon`) | Toggle direct monitoring; display the effective result |
+| BTN2 hold (`src`) | Switch LINE/MIC; this device setting is persistent |
+| Encoder | Adjust device input gain through its parameter API and callback; persistent |
+| BTN4 hold (`exit`) | Exit without restoring or changing audio settings |
+
+Initialization only reads audio settings. The UI follows external state changes,
+including firmware refusing a monitor-enable request. Unavailable input gain
+shows `N/A`. The screen explicitly identifies **STOCK ROUTE / NO DSP**.
+
+Follow [Stage C1 validation and the physical checklist](docs/STAGE_C1.md) first.
+All physical C1 control/audio checks remain **NOT TESTED**.
+
+## Future intended signal path
 
 ```text
 Bitwig Hardware FX
@@ -22,9 +36,11 @@ USB output/input are named from Bitwig's perspective (send/return).
 monitoring OFF:** monitoring the returned pedal signal back to tape!'s output
 would close a feedback loop.
 
-This path is an intended hardware configuration, not a capability implemented or
-proven by this screen-only app. Physical acceptance requires actual tape!
-hardware, Bitwig, and a pedal. Follow [the round-trip test](docs/ROUND_TRIP_TEST.md).
+This path is not implemented or proven by C1. The operator has established that
+the audible input feed-through is stock firmware monitoring; the earlier
+screen-only app did not implement it, and USB audio remains available after
+exiting that app. The [pedal round-trip test](docs/ROUND_TRIP_TEST.md) is deferred
+until the firmware's independent monitor/USB behavior has been established.
 
 ## Local build
 
@@ -45,41 +61,40 @@ assets, so ImageMagick is unnecessary.
 ```sh
 brew install llvm@18
 export PATH="$(brew --prefix llvm@18)/bin:$PATH"
-make check
-make verify
+make check test verify
 ```
 
-On Debian/Ubuntu, install `make python3 clang lld llvm` and run `make check` and
-`make verify` with those tools on PATH. The standalone SDK verifier needs LLVM
+On Debian/Ubuntu, install `make python3 clang lld llvm` and run
+`make check test verify` with those tools on PATH. The SDK verifier needs LLVM
 binutils on PATH even when the SDK builder discovers a Homebrew keg itself.
 
+`make test` runs native firmware-stub checks against the actual app callbacks.
 `make verify` always builds `build/interface.tapp`, runs the SDK's automatic gate,
-then calls `tape_sdk/tools/verify-tapp.sh` explicitly. `make build` builds with the
-automatic gate; `make clean` removes the generated artifact. Build output is
+then calls `tape_sdk/tools/verify-tapp.sh` and checks the finished binary's C1
+control-only imports. `make build` builds with the automatic SDK gate;
+`make clean` removes the app and native test executable. Build output is
 ignored by Git. To try the app on tape!, copy the artifact to its `apps/` folder
 in USB Drive Mode, leave drive mode, and launch it from Setup -> Apps.
 
 ## Validation
 
-Successful command from the repository root on 2026-09-13:
+Successful C1 command from the repository root on 2026-09-14:
 
 ```sh
-PATH="$(brew --prefix llvm@18)/bin:$PATH" make check verify
+PATH="$(brew --prefix llvm@18)/bin:$PATH" make test check verify
 ```
 
-On macOS 26.4.1 arm64 with Homebrew LLVM 18.1.8, this produced
-`build/interface.tapp` (**3,072 bytes**). Both SDK verification runs passed:
-ELF32 little-endian ARM relocatable, supported relocations, no unwind tables,
-valid manifest/entry point, no 64-bit floating-point instructions, and **6/6
-imports resolved** against the pinned SDK header. No gate was skipped.
+Homebrew LLVM 18.1.8 produced `build/interface.tapp` (**4,896 bytes**).
+All seven native firmware-stub groups and both SDK verification runs passed,
+including **18/18 imports resolved**. The finished artifact imports no engine or
+audio-buffer-processing functions.
 
-The [official browser emulator](https://tapp.b.edti.me/) loaded that local binary
-and visibly displayed the title and exit hint. A temporary native callback smoke
-check with firmware stubs passed init/deinit and all 15 button/state combinations:
-only BTN4 HOLD requests exit. That host check used `-U__ARM_FP` to select the
-header's portable math branch; the actual ARM build used the unmodified SDK flags.
-Emulator hold-to-exit was not verified. On 2026-09-14, the operator confirmed the
-physical title/exit hint and two successful launch/BTN4-hold-exit cycles. macOS
-also enumerated tape! as a stereo USB audio device at 48 kHz. See the
-[hardware session](docs/HARDWARE_SESSION_2026-09-14.md). The physical Bitwig/pedal
-audio round trip remains **NOT TESTED**.
+The [official browser emulator](https://tapp.b.edti.me/) loaded the binary and
+displayed the C1 UI. The same unmodified official WASM runtime passed scripted
+monitor/source gestures, exit and reload. It lacks `mixer_get`, so gain shows
+`N/A`; real gain control is not proven by that emulator. See
+[the detailed results and reproduction commands](docs/STAGE_C1.md).
+
+Earlier hardware launch/exit acceptance applies to the **3,072-byte UI-only
+scaffold**, not this C1 binary. Its history and the operator's stock-firmware
+observations are retained in [the hardware session](docs/HARDWARE_SESSION_2026-09-14.md).

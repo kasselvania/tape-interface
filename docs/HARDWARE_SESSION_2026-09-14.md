@@ -1,5 +1,8 @@
 # Hardware session: 2026-09-14
 
+The installation and launch/exit results below belong to the original UI-only
+scaffold. They do not accept the subsequent C1 firmware-control probe.
+
 ## Installation
 
 The operator reported USB Drive Mode active. macOS identified the connected
@@ -45,9 +48,24 @@ time of this host snapshot was not established. Enumeration does not prove audio
 routing or sound.
 
 Bitwig's Audio settings visibly showed the existing **8A** device selected at
-**48,000 Hz / 128 samples**. No combined-device configuration or audio test was
-completed. The operator will configure Bitwig and the physical connections.
+**48,000 Hz / 128 samples**. At that snapshot, no combined-device configuration
+or audio test had been completed. The operator took over Bitwig configuration
+and the physical connections.
 
-Continue with [the physical round-trip procedure](ROUND_TRIP_TEST.md). Firmware
-version, pedal, monitor destination, input source, and monitoring OFF still need
-to be recorded before the audio test.
+The proposed next step was [the physical round-trip procedure](ROUND_TRIP_TEST.md),
+with firmware version, pedal, monitor destination, input source, and monitoring
+OFF still unrecorded. The subsequent observations below supersede that next step.
+
+## Subsequent operator observations and C1 scope
+
+The operator reported audible audio with USB connected, both 3.5 mm audio jacks
+empty, and HW FX at 100% Mix. The operator also confirmed that exiting the
+interface app did not remove tape! as a USB audio device. The operator has since
+established the audible input-to-output feed-through as **stock firmware
+monitoring**, not routing or bypass implemented by the TAPP. The scaffold had
+no audio callbacks or routing code.
+
+These reports do not independently establish the effect of monitor OFF on USB
+playback, USB capture, or input gain. Those are separate **NOT TESTED** rows in
+[the Stage C1 checklist](STAGE_C1.md). C1 exposes stock monitor/source/gain
+controls without taking audio-buffer ownership. Pedal testing remains deferred.

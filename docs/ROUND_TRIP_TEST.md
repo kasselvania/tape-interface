@@ -1,8 +1,13 @@
 # Physical round-trip test
 
-Status: **NOT TESTED on tape! hardware with Bitwig and a pedal.** Local compilation
-or emulator operation cannot establish USB/analog routing, sound, latency, or
-feedback safety. The app is only a screen; it does not configure this path.
+Status: **DEFERRED; NOT TESTED on tape! hardware with Bitwig and a pedal.** Complete
+the independent monitor/USB checks in [Stage C1](STAGE_C1.md) before using this
+future pedal procedure. C1 only controls stock firmware settings; it implements
+no custom routing or bypass.
+
+Local compilation or emulator operation cannot establish USB/analog routing,
+sound, latency, or
+feedback safety. The app does not configure this signal path.
 
 The [2026-09-14 hardware session](HARDWARE_SESSION_2026-09-14.md) records a
 verified USB-storage installation, operator-confirmed physical launch/exit, and
