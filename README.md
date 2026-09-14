@@ -21,10 +21,12 @@ C1 launch is operator-confirmed on firmware 1.1.4 (`e924784c`), but the initial
 gain display showed **50000%** and failed readback validation. A follow-up guard
 shows `N/A (range)` for API values outside the documented range; the operator
 confirmed that result on hardware. A diagnostic follow-up adds exact API and
-parameter bits: the operator observed API=49 for value approximately 0.098 in a
-0..2 range. This is 1,000 times the documented normalized fraction at that
-setting; the full-range scale remains unconfirmed and the conversion is unchanged.
-Physical C1 control/audio checks remain **NOT TESTED**.
+parameter bits: the operator observed API=49 then 49.5 for values approximately
+0.098 then 0.099 in a 0..2 range after encoder movement. Both are 1,000 times
+the documented normalized fraction. The corrected display supports either
+scale only when consistent with the parameter range, displaying 4.90% and 4.95%
+for those snapshots. Corrected-build hardware readback is pending. Parameter
+movement is observed; physical audio response remains **NOT TESTED**.
 
 ## Future intended signal path
 
@@ -91,8 +93,8 @@ Successful C1 command from the repository root on 2026-09-14:
 PATH="$(brew --prefix llvm@18)/bin:$PATH" make test check verify
 ```
 
-Homebrew LLVM 18.1.8 produced the diagnostic `build/interface.tapp` (**5,196 bytes**).
-All eight native firmware-stub groups and both SDK verification runs passed,
+Homebrew LLVM 18.1.8 produced the corrected `build/interface.tapp` (**5,468 bytes**).
+All nine native firmware-stub groups and both SDK verification runs passed,
 including **18/18 imports resolved**. The finished artifact imports no engine or
 audio-buffer-processing functions.
 

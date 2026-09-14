@@ -194,3 +194,38 @@ there is no continuous observation establishing why the underlying value
 changed. Do not attribute that change to a specific action or to init.
 Next: with playback stopped, move the encoder one detent clockwise and report
 both diagnostic lines again. Physical audio/gain response remains NOT TESTED.
+
+## Second readback after encoder movement
+
+The operator moved the encoder, reporting sensitivity and uncertainty about
+whether it was exactly one click. Preserve that uncertainty: no per-detent
+sensitivity or exact event count has been established.
+
+| Field | Reported float bits | Decoded value |
+| --- | --- | --- |
+| API | `42460000` | 49.5 |
+| VAL | `3DCAC084` | 0.0990000069141388 |
+| MIN | `00000000` | 0.0 |
+| MAX | `40000000` | 2.0 |
+
+The normalized fraction is approximately 0.049500003457, or **4.95% of range**.
+Both controlled samples agree with API = normalized fraction x 1000 within
+float precision. Encoder movement changed the real parameter from approximately
+0.098 to 0.099; this proves parameter adjustment/readback at these settings,
+not audible gain, USB capture response, persistence, or full-range behavior.
+
+The display correction now recognizes the documented 0..1 return or the observed
+thousandths return, accepting either only when it matches the public parameter's
+normalized value within 0.000001. It does not select a scale merely because
+API > 1, which would misread small thousandths values. It validates finite
+values and bounds, retaining N/A and the diagnostic bits for any disagreement.
+Only the API result supplies the displayed percentage; the public fields are
+read-only consistency evidence. Display precision is now two decimal places.
+
+Exact snapshots produce 4.90% and 4.95% in native tests. Both SDK verification
+passes and all nine native groups pass, also with optimized fast-math. The
+official emulator passes lifecycle checks with its known missing-mixer limit;
+a separate synthetic fixture confirms readable 4.95% layout, not real gain.
+The production artifact is **5,468 bytes**, SHA-256
+`89c60b0b0e02ce0a3729148df5d9f637509abaaca9150ccf109efa7285ebace3`.
+Corrected-build installation/readback and physical audio remain **NOT TESTED**.

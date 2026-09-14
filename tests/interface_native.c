@@ -137,6 +137,7 @@ static void reset(void) {
     monitor_sets = source_switches = exits = writes = updates = callbacks = 0;
     volume_reads = encoder_reads = percent_reads = 0;
     override_percent = false;
+    volume.min = 10.f; volume.max = 30.f;
     parameter_calls[0] = rendered[0] = '\0';
     volume.val = volume.target = 20.f;
     app = tapp_get_descriptor();
@@ -160,7 +161,7 @@ static void test_lifecycle(void) {
     assert(initialize(app));
     render_has("INPUT: MIC\n");
     render_has("MONITOR: ON\n");
-    render_has("INPUT GAIN: 50%\n");
+    render_has("INPUT GAIN: 50.00%\n");
     assert(monitor_sets == 0 && source_switches == 0 && writes == 0 && updates == 0);
     assert(volume.val == 20.f && volume.target == 25.f);
     assert(app->data->deinit(app));
@@ -226,11 +227,11 @@ static void test_external_refresh(void) {
     source = 1;
     assert(app->tick(app)); render_has("INPUT: MIC\n");
     volume.val = 25.f;
-    assert(app->tick(app)); render_has("INPUT GAIN: 75%\n");
+    assert(app->tick(app)); render_has("INPUT GAIN: 75.00%\n");
     have_volume = false;
     assert(app->tick(app)); render_has("INPUT GAIN: N/A\n");
     have_volume = true;
-    assert(app->tick(app)); render_has("INPUT GAIN: 75%\n");
+    assert(app->tick(app)); render_has("INPUT GAIN: 75.00%\n");
     assert(monitor_sets == 0 && source_switches == 0 && writes == 0 && updates == 0);
     puts("PASS refresh: external monitor/source/gain and availability changes");
 }
@@ -243,21 +244,21 @@ static void test_encoder(void) {
         assert(writes == 1 && updates == 1 && callbacks == 1 && written_delta == 4);
         assert(strcmp(parameter_calls, "WU") == 0 && encoder_reads == 1);
         assert(volume.val == 22.f && percent_reads >= 2);
-        render_has("INPUT GAIN: 60%\n");
+        render_has("INPUT GAIN: 60.00%\n");
         encoder_delta = -8;
         app->on_input(app, 5, state);
         assert(writes == 2 && updates == 2 && callbacks == 2 && written_delta == -8);
         assert(strcmp(parameter_calls, "WUWU") == 0);
-        render_has("INPUT GAIN: 40%\n");
+        render_has("INPUT GAIN: 40.00%\n");
         app->on_input(app, 5, state); /* Zero movement must not write or update. */
         assert(writes == 2 && updates == 2 && encoder_reads == 3);
     }
     encoder_delta = 1000;
     app->on_input(app, 5, KEY_STATE_RELEASED);
-    render_has("INPUT GAIN: 100%\n");
+    render_has("INPUT GAIN: 100.00%\n");
     encoder_delta = -1000;
     app->on_input(app, 5, KEY_STATE_RELEASED);
-    render_has("INPUT GAIN: 0%\n");
+    render_has("INPUT GAIN: 0.00%\n");
     puts("PASS encoder: signed/zero deltas, API order, callback, normalized percentage");
 }
 
@@ -280,7 +281,7 @@ static void test_unavailable_volume(void) {
         have_mixer = have_volume = true;
         app->on_input(app, 5, KEY_STATE_RELEASED);
         assert(writes == 0 && updates == 0); /* No stale movement after recovery. */
-        render_has("INPUT GAIN: 50%\n");
+        render_has("INPUT GAIN: 50.00%\n");
     }
     puts("PASS null mixer/volume: N/A, safe controls, drained encoder, recovery");
 }
@@ -297,7 +298,7 @@ static void test_exit_relaunch(void) {
     memset(&model, 0, sizeof(model));
     assert(initialize(app));
     render_has("INPUT: MIC\n"); render_has("MONITOR: ON\n");
-    render_has("INPUT GAIN: 75%\n");
+    render_has("INPUT GAIN: 75.00%\n");
     assert(monitor_sets == 1 && source_switches == 1 && writes == 1 && updates == 1);
     puts("PASS same-boot exit/relaunch: no restoration or initialization writes");
 }
@@ -306,49 +307,92 @@ static void test_invalid_gain_readback(void) {
     reset(); assert(initialize(app));
     assert(app->tick(app));
     override_percent = true;
-    /* 500 would produce the operator's 50000% with the old conversion.
-     * This reproduces a possible cause, not a measured firmware return. */
     const union { float value; uint32_t bits; } invalid[] = {
-        {.value = 500.f}, {.value = 1.01f}, {.value = -0.01f},
+        {.value = 490.f}, {.value = 1.01f}, {.value = -0.01f},
         {.bits = 0x7f800000u}, {.bits = 0xff800000u}, {.bits = 0x7fc00000u},
     };
     for (unsigned i = 0; i < sizeof(invalid) / sizeof(invalid[0]); i++) {
         percent_result = 0.5f;
         app->tick(app);
-        render_has("INPUT GAIN: 50%\n");
+        render_has("INPUT GAIN: 50.00%\n");
         percent_result = invalid[i].value;
         assert(app->tick(app));
         render_has("INPUT GAIN: N/A (range)\n");
         assert(model.gain_bits[0] == invalid[i].bits);
         render_has("MIN 41200000  MAX 41F00000\n");
-        if (i == 0) render_has("API 43FA0000  VAL 41A00000\n");
         assert(!app->tick(app));
     }
-    percent_result = 500.f;
+    percent_result = 49.f;
     assert(app->tick(app));
     volume.val = volume.target = 21.f;
     assert(app->tick(app));
-    render_has("API 43FA0000  VAL 41A80000\n");
+    render_has("API 42440000  VAL 41A80000\n");
     assert(!app->tick(app));
-    /* Operator's exact readback on firmware 1.1.4 e924784c. Keep this as
-     * invalid until the firmware scale is established, not guessed. */
-    const union { float value; uint32_t bits; } observed = {.bits = 0x3dc8b43au};
-    percent_result = 49.f;
-    volume.val = volume.target = observed.value;
-    volume.min = 0.f;
-    volume.max = 2.f;
-    assert(app->tick(app));
-    render_has("INPUT GAIN: N/A (range)\n");
-    render_has("API 42440000  VAL 3DC8B43A\n");
-    render_has("MIN 00000000  MAX 40000000\n");
-    percent_result = -0.f;
-    assert(app->tick(app)); render_has("INPUT GAIN: 0%\n");
+    percent_result = 0.55f;
+    assert(app->tick(app)); render_has("INPUT GAIN: 55.00%\n");
     assert(strstr(rendered, "API ") == NULL);
     render_has("ENC: input gain (saved)\n");
-    percent_result = 1.f;
-    assert(app->tick(app)); render_has("INPUT GAIN: 100%\n");
+    const float invalid_bounds[][3] = {
+        {20.f, 10.f, 10.f}, {20.f, 30.f, 10.f}, {31.f, 10.f, 30.f},
+        {9.f, 10.f, 30.f},
+    };
+    for (unsigned i = 0; i < sizeof(invalid_bounds)/sizeof(invalid_bounds[0]); i++) {
+        volume.val = invalid_bounds[i][0];
+        volume.min = invalid_bounds[i][1]; volume.max = invalid_bounds[i][2];
+        app->tick(app); render_has("INPUT GAIN: N/A (range)\n");
+    }
+    for (unsigned i = 3; i < 6; i++) {
+        for (unsigned field = 0; field < 3; field++) {
+            volume.val = 20.f; volume.min = 10.f; volume.max = 30.f;
+            float* fields[] = {&volume.val, &volume.min, &volume.max};
+            *fields[field] = invalid[i].value;
+            app->tick(app); render_has("INPUT GAIN: N/A (range)\n");
+        }
+    }
     assert(monitor_sets == 0 && source_switches == 0 && writes == 0 && updates == 0);
-    puts("PASS invalid gain readback: range/NaN/infinity rejected, recovery, no writes");
+    puts("PASS invalid gain: inconsistent API, invalid bounds, non-finite fields, diagnostics, recovery");
+}
+
+static void test_gain_scales(void) {
+    reset(); assert(initialize(app)); app->tick(app);
+    override_percent = true;
+    volume.min = 0.f; volume.max = 2.f;
+    /* Exact paired operator samples; click count was uncertain. */
+    const union { float value; uint32_t bits; } observed[] = {
+        {.bits = 0x3dc8b43au}, {.bits = 0x3dcac084u},
+    };
+    const float api[] = {49.f, 49.5f};
+    const char* labels[] = {"INPUT GAIN: 4.90%\n", "INPUT GAIN: 4.95%\n"};
+    for (unsigned i = 0; i < 2; i++) {
+        volume.val = volume.target = observed[i].value;
+        percent_result = api[i];
+        assert(app->tick(app)); render_has(labels[i]);
+        assert(strstr(rendered, "API ") == NULL);
+        assert(!app->tick(app));
+    }
+    /* Synthetic contract checks across both scales, including near-zero
+     * thousandths <= 1, where selecting scale by magnitude would fail. */
+    const float fractions[] = {0.f, 0.0005f, 0.001f, 0.25f, 0.5f, 1.f};
+    const char* expected[] = {"0.00", "0.05", "0.10", "25.00", "50.00", "100.00"};
+    for (unsigned offset = 0; offset < 2; offset++) {
+        volume.min = offset ? 10.f : 0.f;
+        volume.max = offset ? 30.f : 2.f;
+        for (unsigned scale = 0; scale < 2; scale++) {
+            for (unsigned i = 0; i < sizeof(fractions)/sizeof(fractions[0]); i++) {
+                volume.val = volume.min + fractions[i] * (volume.max - volume.min);
+                percent_result = fractions[i] * (scale ? 1000.f : 1.f);
+                app->tick(app);
+                char label[64];
+                snprintf(label, sizeof(label), "INPUT GAIN: %s%%\n", expected[i]);
+                render_has(label);
+            }
+        }
+    }
+    volume.val = volume.min;
+    percent_result = -0.f;
+    app->tick(app); render_has("INPUT GAIN: 0.00%\n");
+    assert(monitor_sets == 0 && source_switches == 0 && writes == 0 && updates == 0);
+    puts("PASS gain scales: exact hardware samples, normalized/thousandths, small values, endpoints, offset ranges");
 }
 
 int main(void) {
@@ -360,6 +404,7 @@ int main(void) {
     test_unavailable_volume();
     test_exit_relaunch();
     test_invalid_gain_readback();
-    puts("PASS: 8 native firmware-stub groups (physical audio NOT TESTED)");
+    test_gain_scales();
+    puts("PASS: 9 native firmware-stub groups (physical audio NOT TESTED)");
     return 0;
 }

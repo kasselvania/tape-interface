@@ -22,10 +22,13 @@ The implementation follows the pinned `tapp_api.h` and `examples/recorder.c`:
   `param_write_delta_val()` then `param_update_fast(param, NULL)`, exactly like
   the recorder's device input-volume branch. The firmware callback applies
   monitor/USB gain and settings persistence. No parameter fields are assigned.
-- Gain display: `param_val_percent()` on that real parameter, scaled to integer
-  percent across its range; this is not a dB or unity-gain percentage display.
-  A follow-up guard shows `N/A (range)` if the API result violates its documented
-  0..1 range, including non-finite values. It does not infer a different scale.
+- Gain display: `param_val_percent()` on that real parameter, displayed as
+  percent across its range with two decimal places; this is not a dB or
+  unity-gain percentage display. Accept the documented normalized return or
+  the thousandths scale observed on firmware 1.1.4 only if it agrees with the
+  normalized public parameter value within 0.000001. Reject non-finite data,
+  invalid bounds, out-of-bounds values or inconsistent results as `N/A (range)`
+  with exact diagnostic bits. Parameter fields are read, never assigned.
 - BTN4 HOLD: `os_app_exit()`; no restoration of audio settings.
 
 After every control action, and on every UI tick, the app reads input source,
@@ -163,7 +166,31 @@ VAL=`3DC8B43A` (approximately 0.098), MIN=0 and MAX=2. At that point the API
 result is 1,000 times the normalized parameter fraction, within float precision.
 See the [exact hardware evidence](HARDWARE_SESSION_2026-09-14.md). The full-range
 function scale and the reason for the SDK discrepancy remain unestablished;
-the production conversion is unchanged pending another controlled readback.
+at that point the production conversion was unchanged pending another readback.
+
+## Gain display correction after the second readback
+
+After encoder movement (exact click count uncertain), the operator reported
+API=`42460000` (49.5), VAL=`3DCAC084` (approximately 0.099), MIN=0, MAX=2.
+This again agrees with the normalized fraction x 1000. The two samples establish
+that relationship at these settings and demonstrate parameter movement. They
+do not establish a full-range firmware contract or physical gain response.
+
+The correction supports both the documented and observed scales, checking each
+API result against the real parameter range before displaying it. It makes no
+firmware-version assumption and does not choose scale by magnitude. Existing
+null/invalid diagnostics, controls, firmware callbacks and audio boundary remain.
+Nine native groups pass, including both exact hardware snapshots, near-zero
+thousandths, both scales at synthetic endpoints/offset ranges, and inconsistent
+or non-finite readbacks. Optimized fast-math checks also pass.
+
+Current artifact: **5,468 bytes**, SHA-256
+`89c60b0b0e02ce0a3729148df5d9f637509abaaca9150ccf109efa7285ebace3`.
+`PATH="$(brew --prefix llvm@18)/bin:$PATH" make test check verify` passes both
+SDK verification runs and the same 18-import boundary. The official emulator
+lifecycle harness passes, with its existing missing-mixer limitation. A separate
+synthetic fixture confirms the 4.95% display layout. Physical installation and
+readback of the correction are pending; USB and local audio remain NOT TESTED.
 
 ## Physical Stage C checklist
 
