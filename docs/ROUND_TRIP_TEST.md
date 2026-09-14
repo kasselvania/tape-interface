@@ -4,6 +4,10 @@ Status: **NOT TESTED on tape! hardware with Bitwig and a pedal.** Local compilat
 or emulator operation cannot establish USB/analog routing, sound, latency, or
 feedback safety. The app is only a screen; it does not configure this path.
 
+The [2026-09-14 hardware session](HARDWARE_SESSION_2026-09-14.md) records a
+verified USB-storage installation. Physical launch/exit and audio checks remain
+pending.
+
 ## Physical cabling and safety
 
 1. Stop Bitwig transport, mute the send, and turn monitor and tape! output levels
