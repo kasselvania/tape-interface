@@ -292,3 +292,17 @@ hardware stopped and input monitoring disabled; hold BTN4 to exit the standalone
 probe and check headphone audibility in native firmware. Leave Monitor Flag and
 source settings unchanged. This compares probe-active and probe-exited behavior;
 it does not by itself identify the internal routing or callback responsible.
+
+## USB Playback after probe exit: headphones remain silent
+
+Asked whether Bitwig playback became audible in headphones after holding BTN4
+to exit the standalone probe, the operator answered **"no."** Requested settings
+remained Monitor Flag OFF, the same Bitwig output assignment, and headphones
+connected. This explicitly records no audible USB Playback at Output Jack after
+exit. Exiting alone did not restore playback; this is not a fresh-boot native
+baseline and does not exclude retained engine state or establish the cause.
+
+Next: keep external hardware stopped and Bitwig input monitoring disabled, keep
+the same USB Playback running, and use the interface control app to set Monitor
+Flag ON. Read back effective ON and check headphone audibility. This comparison
+is pending and does not assume that Monitor Flag controls USB Playback.
