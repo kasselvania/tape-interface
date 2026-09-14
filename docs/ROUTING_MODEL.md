@@ -13,10 +13,11 @@ interface or effect. New buffer access is confined to the separate probes;
 channel names, sample rate, device input gain, input selection or Monitor Flag
 are changed by either probe. No recording is implemented by the probes.
 
-Firmware 1.2.0 is the planned new session, **not yet an operator-confirmed
-installed version**. All 1.2.0 physical evidence starts NOT TESTED. Do not copy
-1.1.4 results into that session. SDK verification checks the pinned public
-contract, not the installed firmware's actual routing.
+The operator has now reported firmware **1.2.0 (`fa4b2c7f`)** and selected WET.
+Both probes are installed with verified file readback; see the
+[new session](HARDWARE_SESSION_1.2.0_2026-09-14.md). Routing results remain
+NOT TESTED. Do not copy 1.1.4 results into that session. SDK verification checks
+the pinned public contract, not the installed firmware's actual routing.
 
 ## Vocabulary
 
@@ -63,16 +64,16 @@ These establish coupling in that setup. They do not establish whether USB
 Capture taps a mix after Monitor Flag, whether a shared stage is gated/idled,
 or whether firmware 1.2.0 behaves the same way.
 
-### Firmware 1.2.0 — NOT TESTED
+### Firmware 1.2.0 — baseline reported, routing NOT TESTED
 
 | Session field | Evidence |
 | --- | --- |
-| Installed firmware and build hash from About | NOT TESTED / awaiting operator |
-| Operator/date and unit identification | NOT TESTED |
-| Exact app commits, artifact hashes and role | NOT TESTED |
+| Installed firmware and build hash from About | Operator reports 1.2.0 (`fa4b2c7f`) |
+| Operator/date and unit identification | Operator report 2026-09-14; host serial TP-HBWL4Z-049 |
+| Exact app commits, artifact hashes and role | Installed from `05b96fb`; verified hashes/roles in new session; launch NOT TESTED |
 | Bitwig/device configuration, channel mapping, rate/block size | NOT TESTED |
 | Cables, Line Input/Mic Input, Speaker/Output Jack state | NOT TESTED |
-| Monitor Flag, input gain, WET, tapehead levels/sends/transport | NOT TESTED |
+| Monitor Flag, input gain, WET, tapehead levels/sends/transport | WET selected before installation by operator report; other settings and post-install WET pending |
 | Captures and listening observations | NOT TESTED |
 
 Record each change and each result separately; retain failures. “Audible” is
@@ -110,7 +111,7 @@ physical sink is used. No firmware update or installation is implied by this doc
 
 | ID | Test / controlled variation | Observe independently | 1.2.0 result |
 | --- | --- | --- | --- |
-| N0 | Confirm About version/hash after update; record native settings | Version, gain, source, Monitor Flag, WET, transport | NOT TESTED |
+| N0 | Confirm About version/hash after update; record native settings | Version, gain, source, Monitor Flag, WET, transport | PARTIAL: 1.2.0 (`fa4b2c7f`), pre-install WET reported; remaining settings pending |
 | N1 | Native Monitor Flag OFF/ON/OFF with steady Line Input, USB Playback stopped | Speaker, Output Jack, USB Capture L/R | NOT TESTED |
 | N2 | Repeat N1 using C1's Monitor Flag control, with same settings, then exit C1 | Native flag equivalence, effective state, each sink | NOT TESTED |
 | N3 | Disconnect Line Input; stop internal tape playback; send USB Playback L only | Output Jack L/R, Speaker, USB Capture L/R; repeat flag OFF/ON | NOT TESTED |
