@@ -242,3 +242,21 @@ The paired return to BTN3 ZERO has not yet been reported. Keep the external
 hardware playing, return to ZERO, and independently check Output Jack silence,
 flat USB Capture meters, and continued TAPP Input Bus peak activity. Isolated
 Line Input L/R and Monitor Flag ON comparisons remain NOT TESTED for P5.
+
+## P5 paired ZERO result: input remains, both observed destinations stop
+
+With external hardware still playing, after the requested BTN3 return to ZERO,
+the operator reported: **"okay, input meters are still moving. bitwig is flat,
+no audio from the headphones"**.
+
+This completes the qualitative COPY/ZERO comparison: armed COPY had audible
+Line Input at Output Jack and USB Capture meter activity; ZERO leaves TAPP Input
+Bus peaks moving while Output Jack is silent and USB Capture meters are flat.
+Monitor Flag OFF / LINE remains the requested session condition, without a new
+explicit flag/source readback in either P5 report. These observations support
+the standalone TAPP Output Bus contribution reaching both observed destinations
+in this setup. They do not locate the firmware USB Capture tap or establish
+independent control of Output Jack and USB Capture.
+
+P5's isolated Line Input L/R and Monitor Flag ON comparisons remain NOT TESTED.
+USB Playback routing remains NOT TESTED; no recorded waveform was supplied.

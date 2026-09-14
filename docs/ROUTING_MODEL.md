@@ -74,7 +74,7 @@ or whether firmware 1.2.0 behaves the same way.
 | Bitwig/device configuration, channel mapping, rate/block size | NOT TESTED |
 | Cables, Line Input/Mic Input, Speaker/Output Jack state | External hardware at Line Input; Speaker and headphones at Output Jack observed in separate steps. Exact cables/levels not recorded |
 | Monitor Flag, input gain, WET, tapehead levels/sends/transport | Standalone initial readback: Monitor Flag ON, Line Input selected; pre-install WET reported. Other settings and post-install WET pending |
-| Captures and listening observations | P1: TAPP Input Bus peaks move with Monitor Flag ON and OFF. Speaker/USB Capture present ON, silent/flat OFF with zero TAPP Output Bus. P3/P4: tone channel observations below. P5: hardware audible at Output Jack and USB Capture meter moving during COPY; paired ZERO pending. No capture file |
+| Captures and listening observations | P1: TAPP Input Bus peaks move with Monitor Flag ON and OFF. Speaker/USB Capture present ON, silent/flat OFF with zero TAPP Output Bus. P3/P4: tone channel observations below. P5: hardware audible at Output Jack and USB Capture meter moving during COPY; paired ZERO silences Output Jack and flattens USB Capture meters while TAPP Input Bus peaks continue. No capture file |
 
 Record each change and each result separately; retain failures. “Audible” is
 not interchangeable with “present on a recorded USB Capture channel.”
@@ -98,8 +98,11 @@ or establish USB Playback separation.
 During P5's armed COPY step, the operator reports external hardware audible in
 headphones at Output Jack and USB Capture meter activity. Monitor Flag OFF / LINE
 was the requested condition, not a fresh state readback in that report. The
-paired return to ZERO remains pending; this partial result does not establish
-independent USB Playback or separate control of the two observed destinations.
+paired return to ZERO leaves TAPP Input Bus peaks moving while Output Jack is
+silent and USB Capture meters are flat. This qualitative comparison supports
+the TAPP Output Bus contribution reaching both observed destinations in this
+setup. It does not locate the firmware USB Capture tap, establish independent
+USB Playback, or establish separate control of the two observed destinations.
 
 ## Unknown routing edges
 
@@ -229,7 +232,7 @@ No probe result may be filled from native/emulator results or a different row.
 | P2 | Same, USB Playback L then R; Line Input disconnected | NOT TESTED |
 | P3 | Held TONE OUT L then ZERO; record USB Capture L/R and each physical sink | Qualitative signal/channel behavior confirmed by operator after retracting meter-reading mistake; Speaker audible, one headphone side tone/other silent at Output Jack. Both meters drop on ZERO. Quantitative capture NOT TESTED. |
 | P4 | Held TONE OUT R then ZERO; same measurements | Right mode tried after correcting prior left-mode mistake. Operator retracts bleed claim and confirms meter misreading/qualitative separation. No quantitative capture or separately labeled right-headphone report. |
-| P5 | Held COPY INPUT TO OUTPUT vs ZERO, isolated Line Input L/R, flag OFF/ON | PARTIAL: operator hears hardware at Output Jack and sees USB Capture activity during armed COPY under requested OFF / LINE conditions. Paired ZERO, isolated L/R and flag ON comparisons NOT TESTED. |
+| P5 | Held COPY INPUT TO OUTPUT vs ZERO, isolated Line Input L/R, flag OFF/ON | PARTIAL: paired COPY/ZERO observed under requested OFF / LINE conditions. COPY: hardware audible at Output Jack, USB Capture meter moving. ZERO: Output Jack silent, USB Capture flat, TAPP Input Bus peaks still moving. Isolated L/R and flag ON comparisons NOT TESTED. |
 | P6 | EXPERIMENTAL negative-input trim 0/10/25%, rearm each; compare captured levels/phase with ZERO | NOT TESTED |
 | P7 | Standalone pause/exit/relaunch; native tape/flag/source behavior | NOT TESTED |
 | S0 | Source role selected, native WET confirmed; disabled meter/zero | NOT TESTED |
