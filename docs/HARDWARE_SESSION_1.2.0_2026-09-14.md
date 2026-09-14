@@ -134,3 +134,24 @@ select TONE OUT L, and explicitly hold BTN2 to arm the approximately -36 dBFS
 997 Hz test. Observe Speaker and USB Capture L/R independently, then BTN3 ZERO.
 This begins P3 and tests destinations of TAPP Output Bus without conflating them
 with Line Input feed-through. No new installation is needed.
+
+## P3: TONE OUT L with Monitor Flag OFF
+
+In response to the left-tone test, the operator reported Speaker audible,
+USB Capture left meter moving, USB Capture right meter not moving, and BTN3
+returning the probe to zero mode. The test condition was Monitor Flag OFF with
+external Line Input audio and USB Playback stopped as instructed. No numerical
+levels, recorded frequency measurement or Output Jack observation was supplied.
+
+This establishes the standalone TAPP Output Bus left contribution reaching
+Speaker and USB Capture left with Monitor Flag OFF, with no right-channel meter
+activity observed. It does not locate the exact USB Capture tap, quantify
+crosstalk, prove Output Jack routing or establish USB Playback separation.
+The programmed tone is 997 Hz at approximately -36 dBFS peak; those values are
+software-validated, not independently measured at the physical sinks here.
+BTN3's return to zero mode is operator-confirmed; post-stop sink levels were not
+separately reported.
+
+Next: from METER INPUT / ZERO OUTPUT, press BTN1 twice to select TONE OUT R /
+1499 Hz, hold BTN2 to arm, observe Speaker and both USB Capture meters, then
+BTN3 ZERO. Leave Monitor Flag OFF and the other sources stopped.
