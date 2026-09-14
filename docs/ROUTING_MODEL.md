@@ -217,7 +217,7 @@ No probe result may be filled from native/emulator results or a different row.
 | P1 | METER INPUT / ZERO OUTPUT, Line Input, flag OFF/ON; observe each sink | OBSERVED: input peaks move ON/OFF; Speaker and USB Capture present ON, silent/flat OFF. Output Jack and isolated L/R NOT TESTED. |
 | P2 | Same, USB Playback L then R; Line Input disconnected | NOT TESTED |
 | P3 | Held TONE OUT L then ZERO; record USB Capture L/R and each physical sink | OBSERVED with flag OFF: Speaker audible, USB Capture left moving/right flat; BTN3 returns to zero mode. Output Jack and recorded measurements NOT TESTED. |
-| P4 | Held TONE OUT R then ZERO; same measurements | NOT TESTED |
+| P4 | Held TONE OUT R then ZERO; same measurements | UNRESOLVED: during requested test, Speaker audible and Bitwig bars mainly left with some right. Exact mode/flag and meter identity need confirmation; no channel-isolation acceptance. |
 | P5 | Held COPY INPUT TO OUTPUT vs ZERO, isolated Line Input L/R, flag OFF/ON | NOT TESTED |
 | P6 | EXPERIMENTAL negative-input trim 0/10/25%, rearm each; compare captured levels/phase with ZERO | NOT TESTED |
 | P7 | Standalone pause/exit/relaunch; native tape/flag/source behavior | NOT TESTED |

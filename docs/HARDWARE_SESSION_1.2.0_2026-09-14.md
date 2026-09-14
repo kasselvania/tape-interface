@@ -155,3 +155,18 @@ separately reported.
 Next: from METER INPUT / ZERO OUTPUT, press BTN1 twice to select TONE OUT R /
 1499 Hz, hold BTN2 to arm, observe Speaker and both USB Capture meters, then
 BTN3 ZERO. Leave Monitor Flag OFF and the other sources stopped.
+
+## P4 attempt: unexpected meter balance
+
+During the requested right-tone test, the operator reported Speaker audible
+and Bitwig bars showing mainly left activity with some right activity. This
+does not match the expected right-only result.
+
+The exact on-device mode/Monitor Flag readback and the identity of the Bitwig
+meter being viewed were not reconfirmed with this report. Record it as an
+unresolved observation, not proof of reversed channels, crosstalk, firmware
+mixing or a successful right-channel test. No audio capture was supplied.
+
+Next: confirm the displayed mode/Monitor Flag and whether the observed bars
+belong to USB Capture input, a track, or the master. Return to ZERO with BTN3.
+Resolve those details before changing routing or accepting channel isolation.
