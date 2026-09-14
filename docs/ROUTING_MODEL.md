@@ -74,7 +74,7 @@ or whether firmware 1.2.0 behaves the same way.
 | Bitwig/device configuration, channel mapping, rate/block size | NOT TESTED |
 | Cables, Line Input/Mic Input, Speaker/Output Jack state | NOT TESTED |
 | Monitor Flag, input gain, WET, tapehead levels/sends/transport | Standalone initial readback: Monitor Flag ON, Line Input selected; pre-install WET reported. Other settings and post-install WET pending |
-| Captures and listening observations | NOT TESTED |
+| Captures and listening observations | P1 with Monitor Flag ON: L/R peaks move, Speaker audible, USB Capture meter moves by operator report; no capture file, Output Jack untested |
 
 Record each change and each result separately; retain failures. “Audible” is
 not interchangeable with “present on a recorded USB Capture channel.”
@@ -203,7 +203,7 @@ No probe result may be filled from native/emulator results or a different row.
 | ID | Probe experiment | 1.2.0 result |
 | --- | --- | --- |
 | P0 | Standalone launch/relaunch disarmed; effective flag/source and input peaks | PARTIAL: launch screen shows METER INPUT / ZERO OUTPUT, Monitor Flag ON, LINE, peaks L0/R0. Relaunch and stimulated meter response pending. |
-| P1 | METER INPUT / ZERO OUTPUT, Line Input, flag OFF/ON; observe each sink | NOT TESTED |
+| P1 | METER INPUT / ZERO OUTPUT, Line Input, flag OFF/ON; observe each sink | PARTIAL: flag ON — TAPP Input Bus L/R peaks move, Speaker audible, USB Capture meter moves. Flag OFF and Output Jack NOT TESTED. |
 | P2 | Same, USB Playback L then R; Line Input disconnected | NOT TESTED |
 | P3 | Held TONE OUT L then ZERO; record USB Capture L/R and each physical sink | NOT TESTED |
 | P4 | Held TONE OUT R then ZERO; same measurements | NOT TESTED |

@@ -50,10 +50,11 @@ the standalone probe.
 
 ## Physical results
 
-Native routing rows N1–N9, standalone rows P1–P7 and source rows S0–S3 in
-[the routing matrices](ROUTING_MODEL.md) remain **NOT TESTED**. N0 and P0 are
-partial as recorded below. No USB Playback, USB Capture, Analog Playback,
-Speaker, Output Jack or internal tape behavior has been accepted in this session.
+Native routing rows N1–N9, standalone rows P2–P7 and source rows S0–S3 in
+[the routing matrices](ROUTING_MODEL.md) remain **NOT TESTED**. N0, P0 and P1
+are partial as recorded below. Speaker and USB Capture signal presence with
+Line Input and Monitor Flag ON are operator-observed; Output Jack, USB Playback
+and internal tape behavior remain untested.
 
 ## Standalone initial screen readback
 
@@ -76,3 +77,29 @@ Next: keep METER INPUT / ZERO OUTPUT, stop USB Playback, feed a steady external
 Line Input at low level, and observe the TAPP Input Bus peaks, Speaker or
 Output Jack, and USB Capture separately. Keep DAW input monitoring off. This
 begins P1 with Monitor Flag ON; no arming or generated probe signal is required.
+
+## P1: Line Input with Monitor Flag ON
+
+Responding to that test, the operator reported:
+
+- TAPP Input Bus L/R peaks move.
+- Speaker is audible.
+- Bitwig's USB Capture input meter moves.
+- Output Jack was not checked.
+
+The established probe configuration was METER INPUT / ZERO OUTPUT, Monitor Flag
+ON, LINE. The instructions were to stop USB Playback and disable Bitwig input
+monitoring; those host controls were not separately captured. No numerical peak
+values, isolated L/R stimuli or audio recording were supplied.
+
+This supports Line Input reaching TAPP Input Bus, Speaker and USB Capture while
+the probe is programmed to write zeros to the whole TAPP Output Bus. A firmware
+contribution after or parallel to that write is a supported inference, not a
+measurement of the exact connection. Do not infer Output Jack behavior or USB
+Capture's exact tap point from these reports.
+
+Next: set Monitor Flag OFF through C1 (the probe has no Monitor Flag setter),
+then relaunch `route_probe` and confirm METER INPUT / ZERO OUTPUT, flag OFF,
+LINE. Keep the external signal and gain unchanged. Observe the same three
+results again: TAPP Input Bus peaks, Speaker, USB Capture meter. This tests
+whether the flag changes the input seen by the probe or only downstream paths.
