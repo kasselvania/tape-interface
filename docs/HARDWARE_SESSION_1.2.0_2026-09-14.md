@@ -50,8 +50,29 @@ the standalone probe.
 
 ## Physical results
 
-All native routing rows N1–N9, standalone rows P0–P7 and source rows S0–S3 in
-[the routing matrices](ROUTING_MODEL.md) remain **NOT TESTED**. N0 is partial:
-firmware/build and pre-install WET are operator-reported, remaining settings
-are pending. No USB Playback, USB Capture, Analog Playback, Speaker, Output Jack
-or internal tape behavior has been accepted in this new session.
+Native routing rows N1–N9, standalone rows P1–P7 and source rows S0–S3 in
+[the routing matrices](ROUTING_MODEL.md) remain **NOT TESTED**. N0 and P0 are
+partial as recorded below. No USB Playback, USB Capture, Analog Playback,
+Speaker, Output Jack or internal tape behavior has been accepted in this session.
+
+## Standalone initial screen readback
+
+The operator reported:
+
+```text
+Meter input / zero output
+monitor flag: ON LINE
+input peak L0 R0
+```
+
+Standalone launch and the initial displayed mode/state are confirmed by operator
+report. Monitor Flag is ON; Line Input is selected. Relaunch and the explicit
+disarmed label have not been separately reported. Zero displayed peaks alone
+do not prove callback activity, an absent input, a silent TAPP Output Bus or
+any sink routing. Source stimulus/cabling, WET after disk mode and Bitwig state
+at this readback were not supplied.
+
+Next: keep METER INPUT / ZERO OUTPUT, stop USB Playback, feed a steady external
+Line Input at low level, and observe the TAPP Input Bus peaks, Speaker or
+Output Jack, and USB Capture separately. Keep DAW input monitoring off. This
+begins P1 with Monitor Flag ON; no arming or generated probe signal is required.

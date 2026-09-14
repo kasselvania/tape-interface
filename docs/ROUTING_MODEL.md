@@ -73,7 +73,7 @@ or whether firmware 1.2.0 behaves the same way.
 | Exact app commits, artifact hashes and role | Installed from `05b96fb`; verified hashes/roles in new session; launch NOT TESTED |
 | Bitwig/device configuration, channel mapping, rate/block size | NOT TESTED |
 | Cables, Line Input/Mic Input, Speaker/Output Jack state | NOT TESTED |
-| Monitor Flag, input gain, WET, tapehead levels/sends/transport | WET selected before installation by operator report; other settings and post-install WET pending |
+| Monitor Flag, input gain, WET, tapehead levels/sends/transport | Standalone initial readback: Monitor Flag ON, Line Input selected; pre-install WET reported. Other settings and post-install WET pending |
 | Captures and listening observations | NOT TESTED |
 
 Record each change and each result separately; retain failures. “Audible” is
@@ -202,7 +202,7 @@ No probe result may be filled from native/emulator results or a different row.
 
 | ID | Probe experiment | 1.2.0 result |
 | --- | --- | --- |
-| P0 | Standalone launch/relaunch disarmed; effective flag/source and input peaks | NOT TESTED |
+| P0 | Standalone launch/relaunch disarmed; effective flag/source and input peaks | PARTIAL: launch screen shows METER INPUT / ZERO OUTPUT, Monitor Flag ON, LINE, peaks L0/R0. Relaunch and stimulated meter response pending. |
 | P1 | METER INPUT / ZERO OUTPUT, Line Input, flag OFF/ON; observe each sink | NOT TESTED |
 | P2 | Same, USB Playback L then R; Line Input disconnected | NOT TESTED |
 | P3 | Held TONE OUT L then ZERO; record USB Capture L/R and each physical sink | NOT TESTED |
