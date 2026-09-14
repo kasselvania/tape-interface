@@ -227,3 +227,18 @@ Flag OFF / LINE. Resume a low-level external Line Input with USB Playback and
 Bitwig input monitoring off. Select COPY INPUT TO OUTPUT by its displayed name,
 hold BTN2 to arm, and compare Output Jack audibility and USB Capture activity
 against ZERO. This begins P5 without asserting independent USB Playback routing.
+
+## P5 partial: armed COPY reaches Output Jack and USB Capture
+
+Following the COPY test instructions above, the operator reported: **"I hear
+the hardware n the headphones and BitWig's USB capture meter is moving."**
+
+This records external hardware audibility at Output Jack and USB Capture meter
+activity during the armed COPY step. Monitor Flag OFF / LINE, USB Playback off,
+and Bitwig input monitoring off were the requested test conditions; the operator
+did not repeat those settings in this report. No recorded waveform was supplied.
+
+The paired return to BTN3 ZERO has not yet been reported. Keep the external
+hardware playing, return to ZERO, and independently check Output Jack silence,
+flat USB Capture meters, and continued TAPP Input Bus peak activity. Isolated
+Line Input L/R and Monitor Flag ON comparisons remain NOT TESTED for P5.
