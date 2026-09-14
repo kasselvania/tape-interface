@@ -229,3 +229,22 @@ a separate synthetic fixture confirms readable 4.95% layout, not real gain.
 The production artifact is **5,468 bytes**, SHA-256
 `89c60b0b0e02ce0a3729148df5d9f637509abaaca9150ccf109efa7285ebace3`.
 Corrected-build installation/readback and physical audio remain **NOT TESTED**.
+
+## Corrected gain display installation
+
+The operator activated USB Drive Mode. Bedtime tape!'s Tape Storage was
+identified as `disk5`, writable ExFAT `disk5s1` at `/Volumes/Untitled`.
+
+- App commit: `811c6a6ae9fafa50b85fe35e97967683e32e8ce3`.
+- SDK unchanged: `a9cae67124f4209833e3f63c1cd97b11a8f73070`.
+- Verified the previous 5,196-byte diagnostic app's hash before replacement;
+  backup retained in ignored `build/hardware-backup/20260914-111002/`.
+- Installed `apps/interface.tapp`: **5,468 bytes**, byte-for-byte readback match
+  after `sync`, SHA-256
+  `89c60b0b0e02ce0a3729148df5d9f637509abaaca9150ccf109efa7285ebace3`.
+- Device `apps/` contained only `interface.tapp`.
+- `diskutil eject /dev/disk5` completed successfully.
+
+Corrected-build launch and displayed percentage remain **NOT TESTED**. Next:
+launch without moving the encoder and report the input-gain label. If the
+parameter is unchanged from the last diagnostic readback, it should show 4.95%.

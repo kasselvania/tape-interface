@@ -189,8 +189,9 @@ Current artifact: **5,468 bytes**, SHA-256
 `PATH="$(brew --prefix llvm@18)/bin:$PATH" make test check verify` passes both
 SDK verification runs and the same 18-import boundary. The official emulator
 lifecycle harness passes, with its existing missing-mixer limitation. A separate
-synthetic fixture confirms the 4.95% display layout. Physical installation and
-readback of the correction are pending; USB and local audio remain NOT TESTED.
+synthetic fixture confirms the 4.95% display layout. The correction has been
+installed with byte-for-byte readback and safe ejection; its displayed hardware
+percentage is pending. USB and local audio remain NOT TESTED.
 
 ## Physical Stage C checklist
 
