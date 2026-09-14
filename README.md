@@ -1,5 +1,12 @@
 # Tape Interface
 
+New work: [routing reconnaissance](docs/ROUTING_MODEL.md) and
+[Bitwig port aliases](docs/BITWIG_PORTS.md). `route_probe` is a separate
+standalone engine probe; `route_source_probe` is a separate WET source-role
+probe for firmware 1.2.0. Both require a held action before enabling their own
+signal contribution. Firmware 1.2.0 physical results are **NOT TESTED**.
+The existing C1 app and firmware-1.1.4 evidence below remain unchanged.
+
 Stage C1 is a fullscreen **firmware audio-control probe**. It displays the
 effective monitor state, LINE/MIC source, and device input-gain percentage, and
 lets the operator change those stock firmware settings. It has no audio
