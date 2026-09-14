@@ -85,10 +85,14 @@ It does silence Speaker and USB Capture when the probe writes zero TAPP Output
 Bus. This narrows the coupling to a path after or parallel to the input-bus
 observation; it does not prove USB Capture uses TAPP Output Bus or Analog Playback.
 
-P3 then established that a standalone left tone written to TAPP Output Bus
-reaches Speaker and USB Capture left with Monitor Flag OFF; USB Capture right
-showed no meter activity. This is sink-reachability evidence, not proof of the
-internal tap point, measured channel isolation or USB Playback separation.
+P3 established that a standalone left tone written to TAPP Output Bus reaches
+Speaker and USB Capture left with Monitor Flag OFF. The operator later corrected
+a left/right mode mix-up and reported residual activity in the other channel
+for both tones. The initial right-flat report must not be treated as verified
+isolation. The residual has not been shown to contain the tone rather than
+background noise. Mic Input pickup was suggested by the operator but is unproven.
+Sink reachability does not establish the internal tap, channel isolation or
+USB Playback separation.
 
 ## Unknown routing edges
 
@@ -216,8 +220,8 @@ No probe result may be filled from native/emulator results or a different row.
 | P0 | Standalone launch/relaunch disarmed; effective flag/source and input peaks | PARTIAL: launch screen shows METER INPUT / ZERO OUTPUT, Monitor Flag ON, LINE, peaks L0/R0. Relaunch and stimulated meter response pending. |
 | P1 | METER INPUT / ZERO OUTPUT, Line Input, flag OFF/ON; observe each sink | OBSERVED: input peaks move ON/OFF; Speaker and USB Capture present ON, silent/flat OFF. Output Jack and isolated L/R NOT TESTED. |
 | P2 | Same, USB Playback L then R; Line Input disconnected | NOT TESTED |
-| P3 | Held TONE OUT L then ZERO; record USB Capture L/R and each physical sink | OBSERVED with flag OFF: Speaker audible, USB Capture left moving/right flat; BTN3 returns to zero mode. Output Jack and recorded measurements NOT TESTED. |
-| P4 | Held TONE OUT R then ZERO; same measurements | UNRESOLVED: during requested test, Speaker audible and Bitwig bars mainly left with some right. Exact mode/flag and meter identity need confirmation; no channel-isolation acceptance. |
+| P3 | Held TONE OUT L then ZERO; record USB Capture L/R and each physical sink | Speaker/USB Capture signal observed. Later correction reports residual other-channel activity; initial right-flat report is superseded. Isolation UNRESOLVED; Output Jack untested. |
+| P4 | Held TONE OUT R then ZERO; same measurements | Operator confirms right mode tried after correcting a prior left-mode mistake; reports residual activity with both tones. Isolation, baseline and meter identity UNRESOLVED; no measured capture. |
 | P5 | Held COPY INPUT TO OUTPUT vs ZERO, isolated Line Input L/R, flag OFF/ON | NOT TESTED |
 | P6 | EXPERIMENTAL negative-input trim 0/10/25%, rearm each; compare captured levels/phase with ZERO | NOT TESTED |
 | P7 | Standalone pause/exit/relaunch; native tape/flag/source behavior | NOT TESTED |

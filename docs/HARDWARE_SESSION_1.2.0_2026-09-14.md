@@ -170,3 +170,25 @@ mixing or a successful right-channel test. No audio capture was supplied.
 Next: confirm the displayed mode/Monitor Flag and whether the observed bars
 belong to USB Capture input, a track, or the master. Return to ZERO with BTN3.
 Resolve those details before changing routing or accepting channel isolation.
+
+## Operator correction: both tone modes tried; residual channel activity
+
+The operator clarified that the preceding supposed right-tone observation was
+accidentally made in left-tone mode. They then tried right-tone mode and reported
+that both tone modes have "SOME bleed between the two." This corrects the earlier
+mode attribution and supersedes treating the first right-flat report as verified
+isolation. Preserve those earlier reports as chronology, not current conclusions.
+
+The observation is residual meter activity on the other channel; no captured
+frequency or numerical level establishes that the residual contains the test
+tone. Meter identity, current flag/source readback and post-ZERO baseline remain
+unconfirmed for this correction. The operator asked whether Mic Input could be
+picking up Speaker. That is a hypothesis, not an observed routing edge.
+
+The last explicit state was LINE with Monitor Flag OFF. The pinned SDK describes
+Line Input and Mic Input as alternative selections and allows jack changes to
+alter effective Monitor Flag. Do not infer active Mic Input from small meter
+activity. First compare residual activity with BTN3 ZERO, keeping other sources
+stopped and DAW input monitoring off. A later Speaker-versus-Output Jack comparison
+can investigate acoustic pickup, with flag/source rechecked after jack insertion;
+it also changes hardware routing and cannot alone prove a microphone path.
