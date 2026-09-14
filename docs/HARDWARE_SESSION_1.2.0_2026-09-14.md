@@ -207,3 +207,23 @@ left-only tone at the same test level and compare residual USB Capture right
 activity, then BTN3 ZERO. Log the jack/flag/source state with the result. Jack
 insertion also changes firmware routing, so a difference alone is not proof
 that Mic Input caused the residual.
+
+## Correction resolved: Bitwig meter interpretation, not observed bleed
+
+The operator retracted the bleed report: **"its NOT audio bleed"**. When asked
+whether the meters had been misread and the separate tone channels were now
+confirmed, they answered: **"Yeah, I misread the bitwig levels. When I put in
+the headphones, one had tone, one was silent."**
+
+This supersedes the earlier residual-channel interpretation and its associated
+noise/coupling inferences. Do not retain a demonstrated bleed or Mic Input pickup
+edge in the routing model. The operator confirms the meter-reading mistake and
+qualitative separation, including tone in one headphone side with the other
+silent at Output Jack. The headphone side was not explicitly named in this
+latest report; no quantitative crosstalk or per-channel recording was collected.
+
+Next: keep headphones connected, return to ZERO with BTN3 and confirm Monitor
+Flag OFF / LINE. Resume a low-level external Line Input with USB Playback and
+Bitwig input monitoring off. Select COPY INPUT TO OUTPUT by its displayed name,
+hold BTN2 to arm, and compare Output Jack audibility and USB Capture activity
+against ZERO. This begins P5 without asserting independent USB Playback routing.
