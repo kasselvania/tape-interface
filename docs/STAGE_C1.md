@@ -2,8 +2,9 @@
 
 Basis: resolved local and remote `main` at
 `ef9aca7cf8817c12f39e5f00597a62f4c5a8d2a1` before editing. SDK remains
-`a9cae67124f4209833e3f63c1cd97b11a8f73070`, API 1.8. The C1 project revision is
-the commit containing this file; record its full hash when testing hardware.
+`a9cae67124f4209833e3f63c1cd97b11a8f73070`, API 1.8. Initial C1 implementation:
+`a0ca8c87f69040b2f370d9449e4740a663dc50d8`. Record the exact app revision/hash
+when testing follow-up builds.
 
 ## Scope and SDK basis
 
@@ -23,6 +24,8 @@ The implementation follows the pinned `tapp_api.h` and `examples/recorder.c`:
   monitor/USB gain and settings persistence. No parameter fields are assigned.
 - Gain display: `param_val_percent()` on that real parameter, scaled to integer
   percent across its range; this is not a dB or unity-gain percentage display.
+  A follow-up guard shows `N/A (range)` if the API result violates its documented
+  0..1 range, including non-finite values. It does not infer a different scale.
 - BTN4 HOLD: `os_app_exit()`; no restoration of audio settings.
 
 After every control action, and on every UI tick, the app reads input source,
@@ -112,11 +115,32 @@ describes this emulator, not the device's stock firmware audio behavior.
 The harness records this known runtime gap explicitly and fails on a changed
 unresolved-symbol set so a newer emulator must be reviewed again.
 
-No installed-firmware deviation from the pinned documentation has been
-established in C1. Physical control, refused-enable behavior and persistence are
-still NOT TESTED. Native stubs and emulator UI do not establish physical audio.
+## Hardware readback discrepancy and guarded follow-up
 
-## Physical Stage C checklist — all NOT TESTED
+On firmware **1.1.4 (`e924784c`)**, the operator launched the initial C1 build
+and reported LINE, gain **50000%**, monitor ON and the expected stock-route and
+encoder labels. Launch passed; gain readback failed. See the exact report in
+[the hardware session](HARDWARE_SESSION_2026-09-14.md). The discrepancy conflicts
+with the documented percentage expectation, but its API/ABI/display cause is
+not established. Do not interpret 50000% as actual gain or replace the scale
+based on this single display observation.
+
+The follow-up guard preserves the documented conversion for valid values and
+shows `N/A (range)` for invalid values, without setting writes. Its IEEE-754 bit
+check remains valid under the SDK's `-ffast-math` build flag. The new regression
+failed before the guard and passed afterward. Eight native groups now pass,
+including out-of-range, NaN/infinity, endpoints and recovery checks; a separate
+`-O2 -ffast-math` native build passed those same groups.
+
+Follow-up artifact: **4,964 bytes**, SHA-256
+`4f53f1ac4e91a9a19297664baf710e0fa551a0f9778ad7212b775d751b70222c`.
+The same `make test check verify` command passed both SDK verification runs and
+the unchanged 18-import boundary. `node tests/interface_emulator.mjs` passed
+again with the documented missing-mixer limitation. The follow-up is not yet
+installed or hardware-tested. It guards an invalid display; it does not resolve
+the underlying gain-readback discrepancy or prove physical audio control.
+
+## Physical Stage C checklist
 
 Record operator/date, project and SDK commits, artifact hash, tape! firmware
 version, initial source/gain/effective monitor state, headphones/line cabling,
@@ -128,7 +152,7 @@ feed-through cannot be confused. Keep the pedal disconnected for this cut.
 
 | Check | Procedure and evidence required | Result |
 | --- | --- | --- |
-| Launch/readback | Note stock settings before launch. C1 must show them without changing them; compare LINE/MIC, effective monitor and gain. Record N/A if unavailable. | NOT TESTED |
+| Launch/readback | Note stock settings before launch. C1 must show them without changing them; compare LINE/MIC, effective monitor and gain. Record N/A if unavailable. | PARTIAL: initial C1 launch PASS; gain readback FAIL (50000%). Stock comparison and guarded build NOT TESTED. |
 | Monitor ON / local input | Select LINE; feed a steady external signal. With USB playback stopped, BTN1 press requests ON. Confirm effective ON and physical input audible at tape!'s output. | NOT TESTED |
 | Monitor OFF / local input | Keep the same physical signal. BTN1 press requests OFF. Confirm effective OFF and that local physical-input feed-through disappears. | NOT TESTED |
 | Monitor OFF / USB playback | Stop the external input signal; keep effective monitor OFF. Play a distinct DAW/USB signal to tape!. Confirm it still reaches the physical output. | NOT TESTED |

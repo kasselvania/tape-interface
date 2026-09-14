@@ -8,7 +8,7 @@
 typedef struct {
     uint8_t input;
     bool monitor;
-    int gain_percent;  /* -1 means the device input parameter is unavailable. */
+    int gain_percent;  /* -1 unavailable; -2 outside the SDK's 0..1 contract. */
     bool dirty;
 } interface_model_t;
 
@@ -17,12 +17,25 @@ static params_t* interface_input_volume(void) {
     return mix ? mixer_get_input_vol(mix) : NULL;
 }
 
+static int interface_gain_percent(params_t* volume) {
+    if (!volume) return -1;
+    union { float value; uint32_t bits; } fraction = {
+        .value = param_val_percent(volume),
+    };
+    /* The pinned SDK promises 0..1. Check IEEE-754 bits because its build uses
+     * -ffast-math: ordinary float checks can assume NaN/infinity never occur.
+     * Positive 0..1 and negative zero are the only accepted representations.
+     * Never guess a different firmware scale or clamp it into a valid label. */
+    if (fraction.bits > 0x3f800000u && fraction.bits != 0x80000000u) return -2;
+    return (int)(fraction.value * 100.f);
+}
+
 static void interface_refresh(os_app_t* app) {
     interface_model_t* model = os_app_get_model(app);
     const uint8_t input = os_audio_get_input();
     const bool monitor = os_audio_get_monitor();
     params_t* volume = interface_input_volume();
-    const int gain = volume ? (int)(param_val_percent(volume) * 100.f) : -1;
+    const int gain = interface_gain_percent(volume);
 
     if (model->input != input || model->monitor != monitor ||
         model->gain_percent != gain) {
@@ -60,7 +73,9 @@ static void interface_redraw(gfx_t* gfx, const os_app_t* app) {
     gfx_draw_str(gfx, 10, 82, "Tape Interface");
     gfx_draw_strf(gfx, 10, 110, "INPUT: %s",
                   model->input == 0 ? "LINE" : model->input == 1 ? "MIC" : "N/A");
-    if (model->gain_percent < 0) {
+    if (model->gain_percent == -2) {
+        gfx_draw_str(gfx, 10, 134, "INPUT GAIN: N/A (range)");
+    } else if (model->gain_percent < 0) {
         gfx_draw_str(gfx, 10, 134, "INPUT GAIN: N/A");
     } else {
         gfx_draw_strf(gfx, 10, 134, "INPUT GAIN: %d%%", model->gain_percent);

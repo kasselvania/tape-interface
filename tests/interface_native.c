@@ -17,6 +17,8 @@ static uint8_t source;
 static int32_t encoder_delta, written_delta;
 static unsigned monitor_sets, source_switches, exits, writes, updates, callbacks;
 static unsigned volume_reads, encoder_reads, percent_reads;
+static bool override_percent;
+static float percent_result;
 static char parameter_calls[32];
 static char rendered[1024];
 static os_app_t* app;
@@ -82,6 +84,7 @@ bool param_update_fast(params_t* p, void* ctx) {
 float param_val_percent(const params_t* p) {
     assert(p == &volume);
     percent_reads++;
+    if (override_percent) return percent_result;
     return (p->val - p->min) / (p->max - p->min);
 }
 void ui_statusbar_show(bool on) { assert(on); }
@@ -133,6 +136,7 @@ static void reset(void) {
     encoder_delta = written_delta = 0;
     monitor_sets = source_switches = exits = writes = updates = callbacks = 0;
     volume_reads = encoder_reads = percent_reads = 0;
+    override_percent = false;
     parameter_calls[0] = rendered[0] = '\0';
     volume.val = volume.target = 20.f;
     app = tapp_get_descriptor();
@@ -298,6 +302,33 @@ static void test_exit_relaunch(void) {
     puts("PASS same-boot exit/relaunch: no restoration or initialization writes");
 }
 
+static void test_invalid_gain_readback(void) {
+    reset(); assert(initialize(app));
+    assert(app->tick(app));
+    override_percent = true;
+    /* 500 would produce the operator's 50000% with the old conversion.
+     * This reproduces a possible cause, not a measured firmware return. */
+    const union { float value; uint32_t bits; } invalid[] = {
+        {.value = 500.f}, {.value = 1.01f}, {.value = -0.01f},
+        {.bits = 0x7f800000u}, {.bits = 0xff800000u}, {.bits = 0x7fc00000u},
+    };
+    for (unsigned i = 0; i < sizeof(invalid) / sizeof(invalid[0]); i++) {
+        percent_result = 0.5f;
+        app->tick(app);
+        render_has("INPUT GAIN: 50%\n");
+        percent_result = invalid[i].value;
+        assert(app->tick(app));
+        render_has("INPUT GAIN: N/A (range)\n");
+        assert(!app->tick(app));
+    }
+    percent_result = -0.f;
+    assert(app->tick(app)); render_has("INPUT GAIN: 0%\n");
+    percent_result = 1.f;
+    assert(app->tick(app)); render_has("INPUT GAIN: 100%\n");
+    assert(monitor_sets == 0 && source_switches == 0 && writes == 0 && updates == 0);
+    puts("PASS invalid gain readback: range/NaN/infinity rejected, recovery, no writes");
+}
+
 int main(void) {
     test_lifecycle();
     test_buttons();
@@ -306,6 +337,7 @@ int main(void) {
     test_encoder();
     test_unavailable_volume();
     test_exit_relaunch();
-    puts("PASS: 7 native firmware-stub groups (physical audio NOT TESTED)");
+    test_invalid_gain_readback();
+    puts("PASS: 8 native firmware-stub groups (physical audio NOT TESTED)");
     return 0;
 }

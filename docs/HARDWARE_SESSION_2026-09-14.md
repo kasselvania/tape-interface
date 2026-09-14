@@ -88,6 +88,35 @@ After the operator activated USB Drive Mode again, macOS identified Bedtime
   `apps/` directory contained only `interface.tapp` after installation.
 - `diskutil eject /dev/disk5` completed successfully.
 
-This records C1 file installation only. C1 launch, displayed settings and every
-physical control/audio result in [the Stage C1 checklist](STAGE_C1.md) remain
-**NOT TESTED** pending operator reports.
+At installation, C1 launch and all physical results were pending. The subsequent
+operator report below updates launch/readback only.
+
+## C1 initial hardware readback — gain display failure
+
+The operator confirmed C1's screen appeared, then reported these exact values:
+
+```text
+INPUT: LINE
+INPUT GAIN: 50000%
+MONITOR: ON
+STOCK ROUTE / NO DSP
+ENC: input gain (saved)
+```
+
+Installed firmware was reported as **1.1.4 (`e924784c`)**. C1 launch is PASS by
+operator report; gain readback is **FAIL**. Source/monitor labels are observed,
+but have not been compared independently with stock settings. The displayed
+50000% is not an accepted input-gain measurement. No C1 control or physical
+audio result follows from this screen.
+
+The pinned SDK documents `param_val_percent()` as 0..1 and demonstrates
+multiplication by 100 for display; C1 used that conversion. A returned value of
+500 reproduces 50000% in native stubs, but the firmware return itself has not
+been captured. The cause could still be an API/ABI or display discrepancy;
+the report does not justify choosing a replacement scale.
+
+A follow-up build rejects values outside the documented range with
+`INPUT GAIN: N/A (range)` before integer conversion. It neither guesses a scale
+nor changes audio settings. This guard remains **NOT TESTED on hardware**;
+actual gain readback and control remain unresolved. Next: install the guarded
+build and obtain another untouched readback on the same firmware.

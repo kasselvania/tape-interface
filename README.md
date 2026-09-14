@@ -17,7 +17,10 @@ including firmware refusing a monitor-enable request. Unavailable input gain
 shows `N/A`. The screen explicitly identifies **STOCK ROUTE / NO DSP**.
 
 Follow [Stage C1 validation and the physical checklist](docs/STAGE_C1.md) first.
-All physical C1 control/audio checks remain **NOT TESTED**.
+C1 launch is operator-confirmed on firmware 1.1.4 (`e924784c`), but the initial
+gain display showed **50000%** and failed readback validation. A follow-up guard
+shows `N/A (range)` for API values outside the documented range; its hardware
+readback is pending. Physical C1 control/audio checks remain **NOT TESTED**.
 
 ## Future intended signal path
 
@@ -84,8 +87,8 @@ Successful C1 command from the repository root on 2026-09-14:
 PATH="$(brew --prefix llvm@18)/bin:$PATH" make test check verify
 ```
 
-Homebrew LLVM 18.1.8 produced `build/interface.tapp` (**4,896 bytes**).
-All seven native firmware-stub groups and both SDK verification runs passed,
+Homebrew LLVM 18.1.8 produced the guarded `build/interface.tapp` (**4,964 bytes**).
+All eight native firmware-stub groups and both SDK verification runs passed,
 including **18/18 imports resolved**. The finished artifact imports no engine or
 audio-buffer-processing functions.
 
@@ -95,6 +98,6 @@ monitor/source gestures, exit and reload. It lacks `mixer_get`, so gain shows
 `N/A`; real gain control is not proven by that emulator. See
 [the detailed results and reproduction commands](docs/STAGE_C1.md).
 
-Earlier hardware launch/exit acceptance applies to the **3,072-byte UI-only
-scaffold**, not this C1 binary. Its history and the operator's stock-firmware
-observations are retained in [the hardware session](docs/HARDWARE_SESSION_2026-09-14.md).
+Earlier two-cycle hardware launch/exit acceptance applies to the **3,072-byte
+UI-only scaffold**. Initial C1 launch and the failed gain readback are recorded
+separately in [the hardware session](docs/HARDWARE_SESSION_2026-09-14.md).
