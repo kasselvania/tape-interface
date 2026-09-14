@@ -29,7 +29,7 @@ The implementation follows the pinned `tapp_api.h` and `examples/recorder.c`:
 - BTN4 HOLD: `os_app_exit()`; no restoration of audio settings.
 
 After every control action, and on every UI tick, the app reads input source,
-effective monitor state and current gain again. Its 12-byte model holds observed
+effective monitor state and current gain again. Its 28-byte model holds observed
 display values and a redraw flag, never requested monitor intent. State changes
 trigger repaint. Null mixer/volume produces `INPUT GAIN: N/A`; monitor/source
 controls remain available. Init reads settings only; deinit changes none.
@@ -137,9 +137,27 @@ Follow-up artifact: **4,964 bytes**, SHA-256
 The same `make test check verify` command passed both SDK verification runs and
 the unchanged 18-import boundary. `node tests/interface_emulator.mjs` passed
 again with the documented missing-mixer limitation. The follow-up was installed
-with verified readback and safe ejection; launch/readback is pending. See
+with verified readback and safe ejection; the operator subsequently reported
+`INPUT GAIN: N/A (range)`, confirming the invalid API result on hardware. See
 [the installation record](HARDWARE_SESSION_2026-09-14.md). It guards an invalid display; it does not resolve
 the underlying gain-readback discrepancy or prove physical audio control.
+
+The next diagnostic build adds exact hexadecimal float bits for the API return
+and the parameter's `val`, `min`, and `max`, read through the pinned layout.
+These two diagnostic rows replace the encoder hint only when gain is invalid.
+It preserves the existing control gestures and performs no diagnostic setting
+writes or substitute gain calculation. Changes to the diagnostic values trigger
+redraw even if gain remains invalid.
+
+Diagnostic artifact: **5,196 bytes**, SHA-256
+`6e6a4279443c8595f5d61a81e2eb488f3c82d0f1537f86bd764e223ac214ba6a`.
+The same build/verification command, eight native groups (also with optimized
+fast-math), and official emulator lifecycle harness pass. Native checks verify
+exact diagnostic values, changes while invalid, recovery and no setting writes.
+A separate synthetic display fixture rendered readable diagnostic rows in the
+official emulator. This verifies layout only; its values are not firmware
+measurements. The actual diagnostic binary still encounters the emulator's
+missing mixer and requires hardware installation/readback next.
 
 ## Physical Stage C checklist
 

@@ -10,6 +10,7 @@ typedef struct {
     bool monitor;
     int gain_percent;  /* -1 unavailable; -2 outside the SDK's 0..1 contract. */
     bool dirty;
+    uint32_t gain_bits[4]; /* Invalid readback: API result, val, min, max. */
 } interface_model_t;
 
 static params_t* interface_input_volume(void) {
@@ -17,7 +18,13 @@ static params_t* interface_input_volume(void) {
     return mix ? mixer_get_input_vol(mix) : NULL;
 }
 
-static int interface_gain_percent(params_t* volume) {
+static uint32_t interface_float_bits(float value) {
+    union { float value; uint32_t bits; } sample = {.value = value};
+    return sample.bits;
+}
+
+static int interface_gain_percent(params_t* volume, uint32_t bits[4]) {
+    for (unsigned i = 0; i < 4; i++) bits[i] = 0;
     if (!volume) return -1;
     union { float value; uint32_t bits; } fraction = {
         .value = param_val_percent(volume),
@@ -26,7 +33,15 @@ static int interface_gain_percent(params_t* volume) {
      * -ffast-math: ordinary float checks can assume NaN/infinity never occur.
      * Positive 0..1 and negative zero are the only accepted representations.
      * Never guess a different firmware scale or clamp it into a valid label. */
-    if (fraction.bits > 0x3f800000u && fraction.bits != 0x80000000u) return -2;
+    if (fraction.bits > 0x3f800000u && fraction.bits != 0x80000000u) {
+        bits[0] = fraction.bits;
+        /* Read only the public parameter fields, using the pinned ABI layout.
+         * These are diagnostic evidence, not a replacement gain calculation. */
+        bits[1] = interface_float_bits(volume->val);
+        bits[2] = interface_float_bits(volume->min);
+        bits[3] = interface_float_bits(volume->max);
+        return -2;
+    }
     return (int)(fraction.value * 100.f);
 }
 
@@ -35,7 +50,8 @@ static void interface_refresh(os_app_t* app) {
     const uint8_t input = os_audio_get_input();
     const bool monitor = os_audio_get_monitor();
     params_t* volume = interface_input_volume();
-    const int gain = interface_gain_percent(volume);
+    uint32_t gain_bits[4];
+    const int gain = interface_gain_percent(volume, gain_bits);
 
     if (model->input != input || model->monitor != monitor ||
         model->gain_percent != gain) {
@@ -44,6 +60,10 @@ static void interface_refresh(os_app_t* app) {
     model->input = input;
     model->monitor = monitor;
     model->gain_percent = gain;
+    for (unsigned i = 0; i < 4; i++) {
+        if (model->gain_bits[i] != gain_bits[i]) model->dirty = true;
+        model->gain_bits[i] = gain_bits[i];
+    }
 }
 
 static bool interface_init(os_app_t* app, va_list args) {
@@ -82,7 +102,15 @@ static void interface_redraw(gfx_t* gfx, const os_app_t* app) {
     }
     gfx_draw_strf(gfx, 10, 158, "MONITOR: %s", model->monitor ? "ON" : "OFF");
     gfx_draw_str(gfx, 10, 184, "STOCK ROUTE / NO DSP");
-    gfx_draw_str(gfx, 10, 212, "ENC: input gain (saved)");
+    if (model->gain_percent == -2) {
+        /* Hex preserves exact float bits, without another percentage scale. */
+        gfx_draw_strf(gfx, 10, 206, "API %08X  VAL %08X",
+                      (unsigned)model->gain_bits[0], (unsigned)model->gain_bits[1]);
+        gfx_draw_strf(gfx, 10, 228, "MIN %08X  MAX %08X",
+                      (unsigned)model->gain_bits[2], (unsigned)model->gain_bits[3]);
+    } else {
+        gfx_draw_str(gfx, 10, 212, "ENC: input gain (saved)");
+    }
 }
 
 static bool interface_tick(os_app_t* app) {

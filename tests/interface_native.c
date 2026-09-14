@@ -319,10 +319,21 @@ static void test_invalid_gain_readback(void) {
         percent_result = invalid[i].value;
         assert(app->tick(app));
         render_has("INPUT GAIN: N/A (range)\n");
+        assert(model.gain_bits[0] == invalid[i].bits);
+        render_has("MIN 41200000  MAX 41F00000\n");
+        if (i == 0) render_has("API 43FA0000  VAL 41A00000\n");
         assert(!app->tick(app));
     }
+    percent_result = 500.f;
+    assert(app->tick(app));
+    volume.val = volume.target = 21.f;
+    assert(app->tick(app));
+    render_has("API 43FA0000  VAL 41A80000\n");
+    assert(!app->tick(app));
     percent_result = -0.f;
     assert(app->tick(app)); render_has("INPUT GAIN: 0%\n");
+    assert(strstr(rendered, "API ") == NULL);
+    render_has("ENC: input gain (saved)\n");
     percent_result = 1.f;
     assert(app->tick(app)); render_has("INPUT GAIN: 100%\n");
     assert(monitor_sets == 0 && source_switches == 0 && writes == 0 && updates == 0);

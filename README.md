@@ -19,8 +19,10 @@ shows `N/A`. The screen explicitly identifies **STOCK ROUTE / NO DSP**.
 Follow [Stage C1 validation and the physical checklist](docs/STAGE_C1.md) first.
 C1 launch is operator-confirmed on firmware 1.1.4 (`e924784c`), but the initial
 gain display showed **50000%** and failed readback validation. A follow-up guard
-shows `N/A (range)` for API values outside the documented range; its hardware
-readback is pending. Physical C1 control/audio checks remain **NOT TESTED**.
+shows `N/A (range)` for API values outside the documented range; the operator
+confirmed that result on hardware. A diagnostic follow-up adds exact API and
+parameter bits to investigate the discrepancy; its hardware readback is pending.
+Physical C1 control/audio checks remain **NOT TESTED**.
 
 ## Future intended signal path
 
@@ -87,7 +89,7 @@ Successful C1 command from the repository root on 2026-09-14:
 PATH="$(brew --prefix llvm@18)/bin:$PATH" make test check verify
 ```
 
-Homebrew LLVM 18.1.8 produced the guarded `build/interface.tapp` (**4,964 bytes**).
+Homebrew LLVM 18.1.8 produced the diagnostic `build/interface.tapp` (**5,196 bytes**).
 All eight native firmware-stub groups and both SDK verification runs passed,
 including **18/18 imports resolved**. The finished artifact imports no engine or
 audio-buffer-processing functions.

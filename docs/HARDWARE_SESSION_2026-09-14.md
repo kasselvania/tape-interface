@@ -135,6 +135,25 @@ identified again as `disk5`, writable ExFAT `disk5s1` at `/Volumes/Untitled`.
 - The device's `apps/` directory contained only `interface.tapp`.
 - `diskutil eject /dev/disk5` completed successfully.
 
-Guarded-build launch/readback remains **NOT TESTED**. Next: leave Drive Mode,
-launch the app without moving the encoder or changing settings, and report
-the exact INPUT, INPUT GAIN and MONITOR labels.
+The operator subsequently reported **`INPUT GAIN: N/A (range)`**. Guarded-build
+launch and invalid-range detection are therefore confirmed by operator report.
+The value returned through `param_val_percent()` is outside the pinned SDK's
+documented 0..1 range; the exact value and underlying cause remain unknown.
+Gain readback remains FAIL. Other physical C1 controls/audio remain NOT TESTED.
+
+## Read-only gain diagnostic prepared
+
+A diagnostic follow-up preserves the range guard and adds two lines only while
+the range is invalid: `API` / `VAL` and `MIN` / `MAX`. Each is eight hexadecimal
+digits representing the exact IEEE-754 float bits. `API` is the function return;
+the remaining fields are read using the pinned public `params_t` layout.
+These fields are evidence for investigating the API/ABI discrepancy, not a
+replacement percentage calculation. No parameter fields are written.
+
+The 5,196-byte artifact has SHA-256
+`6e6a4279443c8595f5d61a81e2eb488f3c82d0f1537f86bd764e223ac214ba6a`.
+Native checks, both SDK verification passes, the unchanged 18-import boundary
+and official emulator lifecycle checks passed. A separate synthetic display
+fixture in the official emulator confirmed that the diagnostic lines fit;
+its sample values are not hardware observations and its binary is not for
+installation. Diagnostic-build installation/readback remains NOT TESTED.
