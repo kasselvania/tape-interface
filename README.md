@@ -78,5 +78,8 @@ and visibly displayed the title and exit hint. A temporary native callback smoke
 check with firmware stubs passed init/deinit and all 15 button/state combinations:
 only BTN4 HOLD requests exit. That host check used `-U__ARM_FP` to select the
 header's portable math branch; the actual ARM build used the unmodified SDK flags.
-Emulator hold-to-exit was not verified. Hardware launch/exit and the physical audio
-round trip are **NOT TESTED**.
+Emulator hold-to-exit was not verified. On 2026-09-14, the operator confirmed the
+physical title/exit hint and two successful launch/BTN4-hold-exit cycles. macOS
+also enumerated tape! as a stereo USB audio device at 48 kHz. See the
+[hardware session](docs/HARDWARE_SESSION_2026-09-14.md). The physical Bitwig/pedal
+audio round trip remains **NOT TESTED**.

@@ -20,18 +20,34 @@ directory was empty before installation.
 This verifies file installation through USB storage. It does not establish that
 the firmware can launch the app or that audio passes through the device.
 
-## Physical checks pending
+## Physical checks
+
+The operator confirmed the title/exit-hint check and reported entering and
+exiting the app twice. These are operator-observed hardware results; no physical
+display capture was collected.
 
 | Check | Result |
 | --- | --- |
 | Installed firmware version from Setup -> About | NOT REPORTED |
-| Launch from Setup -> Apps -> interface | NOT TESTED |
-| Title and exit hint visible on the physical display | NOT TESTED |
-| BTN4 hold exits to firmware UI | NOT TESTED |
-| Relaunch after exit | NOT TESTED |
+| Launch from Setup -> Apps -> interface | PASS, operator report |
+| Title and exit hint visible on the physical display | PASS, operator report |
+| BTN4 hold exits to firmware UI | PASS, operator report; two cycles |
+| Relaunch after exit | PASS, operator report |
 | External line input and direct monitoring OFF | NOT TESTED |
 | Bitwig/pedal round trip at 48 kHz, 64/128/256 samples | NOT TESTED |
 
-Continue with [the physical round-trip procedure](ROUND_TRIP_TEST.md) after the
-app launch/exit checks. Record physical observations separately from host-side
-file verification.
+## Host audio enumeration and handoff
+
+After Drive Mode ended, `system_profiler SPAudioDataType` reported **tape!**,
+manufacturer **Bedtime**, USB transport, two input channels, two output channels,
+and a current sample rate of **48,000 Hz**. The app's running/exited state at the
+time of this host snapshot was not established. Enumeration does not prove audio
+routing or sound.
+
+Bitwig's Audio settings visibly showed the existing **8A** device selected at
+**48,000 Hz / 128 samples**. No combined-device configuration or audio test was
+completed. The operator will configure Bitwig and the physical connections.
+
+Continue with [the physical round-trip procedure](ROUND_TRIP_TEST.md). Firmware
+version, pedal, monitor destination, input source, and monitoring OFF still need
+to be recorded before the audio test.

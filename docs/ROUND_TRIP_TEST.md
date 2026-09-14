@@ -5,8 +5,8 @@ or emulator operation cannot establish USB/analog routing, sound, latency, or
 feedback safety. The app is only a screen; it does not configure this path.
 
 The [2026-09-14 hardware session](HARDWARE_SESSION_2026-09-14.md) records a
-verified USB-storage installation. Physical launch/exit and audio checks remain
-pending.
+verified USB-storage installation, operator-confirmed physical launch/exit, and
+host USB audio enumeration. Physical audio checks remain pending.
 
 ## Physical cabling and safety
 
