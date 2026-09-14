@@ -192,3 +192,18 @@ activity. First compare residual activity with BTN3 ZERO, keeping other sources
 stopped and DAW input monitoring off. A later Speaker-versus-Output Jack comparison
 can investigate acoustic pickup, with flag/source rechecked after jack insertion;
 it also changes hardware routing and cannot alone prove a microphone path.
+
+## ZERO baseline after the residual-channel observation
+
+The operator reported **"both meters drop instantly"** when BTN3 returned the
+probe to ZERO. This associates both channels' visible activity with the tone
+being enabled; a steady unrelated noise floor does not explain that observation.
+It does not identify the residual's frequency or distinguish acoustic pickup,
+electrical coupling, firmware mixing, or host-channel/meter configuration.
+
+Next: connect headphones to Output Jack, place them away from tape!, and confirm
+Speaker is silent and the probe still reads Monitor Flag OFF / LINE. Repeat the
+left-only tone at the same test level and compare residual USB Capture right
+activity, then BTN3 ZERO. Log the jack/flag/source state with the result. Jack
+insertion also changes firmware routing, so a difference alone is not proof
+that Mic Input caused the residual.
