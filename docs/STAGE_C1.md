@@ -136,8 +136,9 @@ Follow-up artifact: **4,964 bytes**, SHA-256
 `4f53f1ac4e91a9a19297664baf710e0fa551a0f9778ad7212b775d751b70222c`.
 The same `make test check verify` command passed both SDK verification runs and
 the unchanged 18-import boundary. `node tests/interface_emulator.mjs` passed
-again with the documented missing-mixer limitation. The follow-up is not yet
-installed or hardware-tested. It guards an invalid display; it does not resolve
+again with the documented missing-mixer limitation. The follow-up was installed
+with verified readback and safe ejection; launch/readback is pending. See
+[the installation record](HARDWARE_SESSION_2026-09-14.md). It guards an invalid display; it does not resolve
 the underlying gain-readback discrepancy or prove physical audio control.
 
 ## Physical Stage C checklist

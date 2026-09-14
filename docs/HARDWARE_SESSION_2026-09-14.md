@@ -118,5 +118,23 @@ the report does not justify choosing a replacement scale.
 A follow-up build rejects values outside the documented range with
 `INPUT GAIN: N/A (range)` before integer conversion. It neither guesses a scale
 nor changes audio settings. This guard remains **NOT TESTED on hardware**;
-actual gain readback and control remain unresolved. Next: install the guarded
-build and obtain another untouched readback on the same firmware.
+actual gain readback and control remain unresolved.
+
+## Guarded C1 installation
+
+The operator reactivated USB Drive Mode. Bedtime tape!'s Tape Storage was
+identified again as `disk5`, writable ExFAT `disk5s1` at `/Volumes/Untitled`.
+
+- Installed app commit: `458976184f7ff9960bf69e6ed9ce230faa2e2fd4`.
+- SDK unchanged: `a9cae67124f4209833e3f63c1cd97b11a8f73070`.
+- Verified the previous 4,896-byte C1 app's hash before replacing it; retained
+  a local backup in ignored `build/hardware-backup/20260914-105022/`.
+- Installed `apps/interface.tapp`: **4,964 bytes**, byte-for-byte readback match
+  after `sync`.
+- SHA-256: `4f53f1ac4e91a9a19297664baf710e0fa551a0f9778ad7212b775d751b70222c`.
+- The device's `apps/` directory contained only `interface.tapp`.
+- `diskutil eject /dev/disk5` completed successfully.
+
+Guarded-build launch/readback remains **NOT TESTED**. Next: leave Drive Mode,
+launch the app without moving the encoder or changing settings, and report
+the exact INPUT, INPUT GAIN and MONITOR labels.
