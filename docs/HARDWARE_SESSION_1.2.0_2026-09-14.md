@@ -260,3 +260,17 @@ independent control of Output Jack and USB Capture.
 
 P5's isolated Line Input L/R and Monitor Flag ON comparisons remain NOT TESTED.
 USB Playback routing remains NOT TESTED; no recorded waveform was supplied.
+
+## P2 preliminary: no visible response during requested USB Playback test
+
+The requested setup was to stop external hardware, leave the standalone probe
+at ZERO with Monitor Flag OFF, and play audio from Bitwig to tape! with Bitwig
+input monitoring disabled. Asked about headphones, TAPP Input Bus peaks and
+USB Capture meters, the operator answered: **"nope. I see nothing."**
+
+Record this as no visible meter response in the attempted test. The report does
+not separately identify each meter or explicitly describe headphone audibility.
+Bitwig's active USB Playback port assignment and output meter activity have not
+been confirmed for this step. Do not infer a blocked firmware routing edge until
+the host stimulus is established. Separate USB Playback L/R isolation and the
+Line Input disconnected condition remain unverified.
