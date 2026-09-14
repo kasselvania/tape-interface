@@ -158,7 +158,12 @@ A separate synthetic display fixture rendered readable diagnostic rows in the
 official emulator. This verifies layout only; its values are not firmware
 measurements. The actual diagnostic binary still encounters the emulator's
 missing mixer. The diagnostic build has been installed with verified file
-readback and safe ejection; its physical API/VAL/MIN/MAX readback is pending.
+readback and safe ejection. The operator then reported API=`42440000` (49),
+VAL=`3DC8B43A` (approximately 0.098), MIN=0 and MAX=2. At that point the API
+result is 1,000 times the normalized parameter fraction, within float precision.
+See the [exact hardware evidence](HARDWARE_SESSION_2026-09-14.md). The full-range
+function scale and the reason for the SDK discrepancy remain unestablished;
+the production conversion is unchanged pending another controlled readback.
 
 ## Physical Stage C checklist
 
@@ -172,7 +177,7 @@ feed-through cannot be confused. Keep the pedal disconnected for this cut.
 
 | Check | Procedure and evidence required | Result |
 | --- | --- | --- |
-| Launch/readback | Note stock settings before launch. C1 must show them without changing them; compare LINE/MIC, effective monitor and gain. Record N/A if unavailable. | PARTIAL: initial C1 launch PASS; gain readback FAIL (50000%). Guarded build shows N/A (range). Stock comparison and diagnostic readback NOT TESTED. |
+| Launch/readback | Note stock settings before launch. C1 must show them without changing them; compare LINE/MIC, effective monitor and gain. Record N/A if unavailable. | PARTIAL: launch and diagnostic readback PASS by operator report. Gain percentage FAIL; API=49 for VAL approximately 0.098 in 0..2 range. Stock comparison NOT TESTED. |
 | Monitor ON / local input | Select LINE; feed a steady external signal. With USB playback stopped, BTN1 press requests ON. Confirm effective ON and physical input audible at tape!'s output. | NOT TESTED |
 | Monitor OFF / local input | Keep the same physical signal. BTN1 press requests OFF. Confirm effective OFF and that local physical-input feed-through disappears. | NOT TESTED |
 | Monitor OFF / USB playback | Stop the external input signal; keep effective monitor OFF. Play a distinct DAW/USB signal to tape!. Confirm it still reaches the physical output. | NOT TESTED |

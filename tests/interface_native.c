@@ -330,6 +330,17 @@ static void test_invalid_gain_readback(void) {
     assert(app->tick(app));
     render_has("API 43FA0000  VAL 41A80000\n");
     assert(!app->tick(app));
+    /* Operator's exact readback on firmware 1.1.4 e924784c. Keep this as
+     * invalid until the firmware scale is established, not guessed. */
+    const union { float value; uint32_t bits; } observed = {.bits = 0x3dc8b43au};
+    percent_result = 49.f;
+    volume.val = volume.target = observed.value;
+    volume.min = 0.f;
+    volume.max = 2.f;
+    assert(app->tick(app));
+    render_has("INPUT GAIN: N/A (range)\n");
+    render_has("API 42440000  VAL 3DC8B43A\n");
+    render_has("MIN 00000000  MAX 40000000\n");
     percent_result = -0.f;
     assert(app->tick(app)); render_has("INPUT GAIN: 0%\n");
     assert(strstr(rendered, "API ") == NULL);

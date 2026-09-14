@@ -171,5 +171,26 @@ Tape Storage at `disk5`, with writable ExFAT `disk5s1` at `/Volumes/Untitled`.
 - Device `apps/` contained only `interface.tapp`.
 - `diskutil eject /dev/disk5` completed successfully.
 
-Diagnostic launch and API/VAL/MIN/MAX hardware readback remain **NOT TESTED**.
-Next: launch without moving the encoder and report both diagnostic lines.
+The operator subsequently reported the exact diagnostic values below, confirming
+diagnostic launch/readback on hardware:
+
+| Field | Reported float bits | Decoded value |
+| --- | --- | --- |
+| API | `42440000` | 49.0 |
+| VAL | `3DC8B43A` | 0.09800000488758087 |
+| MIN | `00000000` | 0.0 |
+| MAX | `40000000` | 2.0 |
+
+The normalized fraction derived from these public parameter fields is
+`(VAL - MIN) / (MAX - MIN) = 0.049000002443790436`, or approximately **4.9% of
+the parameter range**. At this sample, the API result is 1,000 times that
+fraction within float precision, contrary to the pinned header's 0..1 contract.
+This is a measured discrepancy, not yet proof of the function's full-range
+scale or behavior. No production conversion has been changed on this basis.
+The exact snapshot is covered by a native regression for diagnostic rendering.
+
+The initial 50000% and this later API=49 sample were taken at different times;
+there is no continuous observation establishing why the underlying value
+changed. Do not attribute that change to a specific action or to init.
+Next: with playback stopped, move the encoder one detent clockwise and report
+both diagnostic lines again. Physical audio/gain response remains NOT TESTED.

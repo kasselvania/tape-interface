@@ -21,7 +21,9 @@ C1 launch is operator-confirmed on firmware 1.1.4 (`e924784c`), but the initial
 gain display showed **50000%** and failed readback validation. A follow-up guard
 shows `N/A (range)` for API values outside the documented range; the operator
 confirmed that result on hardware. A diagnostic follow-up adds exact API and
-parameter bits to investigate the discrepancy; its hardware readback is pending.
+parameter bits: the operator observed API=49 for value approximately 0.098 in a
+0..2 range. This is 1,000 times the documented normalized fraction at that
+setting; the full-range scale remains unconfirmed and the conversion is unchanged.
 Physical C1 control/audio checks remain **NOT TESTED**.
 
 ## Future intended signal path
