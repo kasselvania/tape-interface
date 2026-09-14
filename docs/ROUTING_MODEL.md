@@ -104,6 +104,47 @@ the TAPP Output Bus contribution reaching both observed destinations in this
 setup. It does not locate the firmware USB Capture tap, establish independent
 USB Playback, or establish separate control of the two observed destinations.
 
+## Feasibility boundary for a DAW hardware loop
+
+The operator supplied `tape_signal_flow.svg` for architectural review. The
+[official manual](https://b.edti.me/projects/tape/manual/) also links a
+[signal-flow SVG](https://b.edti.me/images/tape/manual/tape_signal_flow.svg).
+The supplied diagram depicts Line Input / Mic Input and USB Playback joining
+before input volume. Its Monitor Flag branch joins a mix before a limiter;
+the limiter output then branches to USB Capture and Analog Playback. A separate
+optional analog path reaches the Speaker / Output Jack branch. This is diagram
+evidence, not a measurement of every edge on firmware 1.2.0.
+
+The intended stereo hardware loop requires independent paths:
+
+- USB Playback -> Output Jack -> external hardware.
+- External hardware -> Line Input -> USB Capture, without automatically sending
+  the return back to Output Jack or returning USB Playback into USB Capture.
+
+If the diagram's shared stereo mix is the only accessible output contribution,
+changing that contribution cannot independently assign those two destinations.
+The P5 COPY/ZERO observations support a contribution reaching both destinations;
+they do not demonstrate destination separation. Turning Monitor Flag off and
+copying input manually does not supply that missing separation. Applying a
+negative-input contribution to the same shared mix would also affect both
+destinations under this model; cancellation is not a demonstrated solution.
+
+At pinned SDK `a9cae67124f4209833e3f63c1cd97b11a8f73070`, `tapp_api.h`
+explicitly withholds global mixer routing setters (lines 2927 onward). It exposes
+no independent USB Capture destination buffer/source selector or separate USB
+Playback accessor. The recorder example describes firmware input addition after
+the app callback; that explains contribution versus routing ownership, without
+establishing all hardware edges.
+
+**Current capability gap:** no supported public API or measured app-role behavior
+has established the independent stereo paths required by this project. A normal
+TAPP implementation of the desired hardware loop is therefore not established
+as feasible. If no alternate supported route exists, firmware routing changes or
+new SDK controls would be required. More mixer UI or effects cannot supply a
+missing destination control. This does not claim impossibility across all
+firmware internals or untested source-role behavior. The latest requested
+Monitor Flag ON USB Playback comparison remains unreported.
+
 ## Unknown routing edges
 
 | Edge or control effect | What must be measured |
