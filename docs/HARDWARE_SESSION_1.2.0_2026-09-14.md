@@ -274,3 +274,21 @@ Bitwig's active USB Playback port assignment and output meter activity have not
 been confirmed for this step. Do not infer a blocked firmware routing edge until
 the host stimulus is established. Separate USB Playback L/R isolation and the
 Line Input disconnected condition remain unverified.
+
+## P2 follow-up: host meter active, playback pair labeled Front Left and Right
+
+Asked to confirm Bitwig's playback output meter and Tape USB Playback port
+assignment, the operator reported: **"yes, bitwig's meter is moving. I am seeing
+simply \"front left and right\" on the tape as an interface, but that doens't really
+seem to be doing anything."**
+
+Host meter activity and the displayed pair label are now reported. The label
+alone does not establish where firmware sends USB Playback, and this report
+does not provide a channel mapping screenshot or a separate headphone result.
+No host channel renaming or firmware descriptor change was made.
+
+Next comparison: keep Bitwig playing with the same output assignment, external
+hardware stopped and input monitoring disabled; hold BTN4 to exit the standalone
+probe and check headphone audibility in native firmware. Leave Monitor Flag and
+source settings unchanged. This compares probe-active and probe-exited behavior;
+it does not by itself identify the internal routing or callback responsible.
