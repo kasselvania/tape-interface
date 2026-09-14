@@ -103,3 +103,34 @@ then relaunch `route_probe` and confirm METER INPUT / ZERO OUTPUT, flag OFF,
 LINE. Keep the external signal and gain unchanged. Observe the same three
 results again: TAPP Input Bus peaks, Speaker, USB Capture meter. This tests
 whether the flag changes the input seen by the probe or only downstream paths.
+
+## P1: Line Input with Monitor Flag OFF
+
+The operator confirmed METER INPUT / ZERO OUTPUT, Monitor Flag OFF, LINE,
+then reported with audio present:
+
+- Input peak meters move.
+- No audio from Speaker.
+- Bitwig audio meters are flat, with no audio.
+
+This is the paired Monitor Flag OFF observation, following the requested C1
+flag change and return to the standalone probe. It establishes that Line Input
+is still available at TAPP Input Bus while Speaker and USB Capture are silent
+in this configuration. The loss cannot be explained solely by stopping Line
+Input before it reaches that bus. A downstream or parallel firmware path changes;
+the exact USB Capture tap and internal routing are not established.
+
+| METER INPUT / ZERO OUTPUT | TAPP Input Bus peaks | Speaker | USB Capture meter |
+| --- | --- | --- | --- |
+| Monitor Flag ON | Moving | Audible | Moving |
+| Monitor Flag OFF | Moving | Silent | Flat |
+
+Both rows are operator reports, not saved signal measurements. Output Jack,
+isolated stereo channels, and Mic Input remain untested. Do not generalize this
+result to USB Playback or source-role processing.
+
+Next: stop external Line Input audio and USB Playback, keep Monitor Flag OFF,
+select TONE OUT L, and explicitly hold BTN2 to arm the approximately -36 dBFS
+997 Hz test. Observe Speaker and USB Capture L/R independently, then BTN3 ZERO.
+This begins P3 and tests destinations of TAPP Output Bus without conflating them
+with Line Input feed-through. No new installation is needed.
