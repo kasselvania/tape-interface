@@ -157,7 +157,8 @@ exact diagnostic values, changes while invalid, recovery and no setting writes.
 A separate synthetic display fixture rendered readable diagnostic rows in the
 official emulator. This verifies layout only; its values are not firmware
 measurements. The actual diagnostic binary still encounters the emulator's
-missing mixer and requires hardware installation/readback next.
+missing mixer. The diagnostic build has been installed with verified file
+readback and safe ejection; its physical API/VAL/MIN/MAX readback is pending.
 
 ## Physical Stage C checklist
 
@@ -171,7 +172,7 @@ feed-through cannot be confused. Keep the pedal disconnected for this cut.
 
 | Check | Procedure and evidence required | Result |
 | --- | --- | --- |
-| Launch/readback | Note stock settings before launch. C1 must show them without changing them; compare LINE/MIC, effective monitor and gain. Record N/A if unavailable. | PARTIAL: initial C1 launch PASS; gain readback FAIL (50000%). Stock comparison and guarded build NOT TESTED. |
+| Launch/readback | Note stock settings before launch. C1 must show them without changing them; compare LINE/MIC, effective monitor and gain. Record N/A if unavailable. | PARTIAL: initial C1 launch PASS; gain readback FAIL (50000%). Guarded build shows N/A (range). Stock comparison and diagnostic readback NOT TESTED. |
 | Monitor ON / local input | Select LINE; feed a steady external signal. With USB playback stopped, BTN1 press requests ON. Confirm effective ON and physical input audible at tape!'s output. | NOT TESTED |
 | Monitor OFF / local input | Keep the same physical signal. BTN1 press requests OFF. Confirm effective OFF and that local physical-input feed-through disappears. | NOT TESTED |
 | Monitor OFF / USB playback | Stop the external input signal; keep effective monitor OFF. Play a distinct DAW/USB signal to tape!. Confirm it still reaches the physical output. | NOT TESTED |

@@ -156,4 +156,20 @@ Native checks, both SDK verification passes, the unchanged 18-import boundary
 and official emulator lifecycle checks passed. A separate synthetic display
 fixture in the official emulator confirmed that the diagnostic lines fit;
 its sample values are not hardware observations and its binary is not for
-installation. Diagnostic-build installation/readback remains NOT TESTED.
+installation.
+
+## Diagnostic build installation
+
+The operator activated USB Drive Mode. The host identified Bedtime tape! and
+Tape Storage at `disk5`, with writable ExFAT `disk5s1` at `/Volumes/Untitled`.
+
+- App commit: `d6677d7ea26a26ab27abef3f8cc5dac8952f1650`.
+- Verified the previous 4,964-byte guarded app's hash before replacement;
+  backup retained in ignored `build/hardware-backup/20260914-110001/`.
+- Installed `apps/interface.tapp`: **5,196 bytes**, byte-for-byte readback match
+  after `sync`, matching the diagnostic SHA-256 above.
+- Device `apps/` contained only `interface.tapp`.
+- `diskutil eject /dev/disk5` completed successfully.
+
+Diagnostic launch and API/VAL/MIN/MAX hardware readback remain **NOT TESTED**.
+Next: launch without moving the encoder and report both diagnostic lines.
